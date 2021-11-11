@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = "University Course Timetabling Solver with AUK"
   spec.homepage      = "https://github.com/matsuda0528/swallow"
   spec.license       = "MIT"
-  spec.required_ruby_version = ">= 2.4.0"
+  spec.required_ruby_version = ">= 3.0"
 
   # spec.metadata["allowed_push_host"] = "TODO: Set to 'https://mygemserver.com'"
 
