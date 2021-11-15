@@ -1,0 +1,11 @@
+#! /usr/bin/env ruby
+
+$LOAD_PATH.unshift File.expand_path("../lib", __dir__)
+require "swallow"
+require "pry"
+
+module Swallow
+  parser = AUKParser.new
+  parser.instance_eval File.read(ARGV[0]) if ARGV[0]
+  binding.pry
+end
