@@ -1,8 +1,8 @@
 class Resource
-  def initialize(name=nil)
+  def initialize(name = nil)
     @name = name
     @domain = Domain.new
-    @belongs_to
+    @belongs_to = ""
   end
 end
 
@@ -61,11 +61,11 @@ class Lecture < Resource
 end
 
 class Domain
-  attr_reader :by_period
-  attr_reader :by_room
-  attr_reader :by_instructor
+  attr_reader :by_period, :by_room, :by_instructor
+
   def initialize
-    @@nr_resources
+    # @@nr_resources = 0
+    # NOTE:Class Var を使わないような設計をする
     @constraints = []
     @by_period = DomainByPeriod.new
     @by_room = DomainByRoom.new
@@ -74,14 +74,7 @@ class Domain
 end
 
 class DomainByPeriod
-  attr_accessor :nr_days_a_week
-  attr_accessor :nr_periods
-
-  attr_accessor :unavailable
-  attr_accessor :term
-  attr_accessor :period
-  attr_accessor :start_time
-  attr_accessor :end_time
+  attr_accessor :nr_days_a_week, :nr_periods, :unavailable, :term, :period, :start_time, :end_time
 end
 
 class DomainByRoom

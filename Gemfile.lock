@@ -10,6 +10,9 @@ GEM
     parallel (1.21.0)
     parser (3.0.2.0)
       ast (~> 2.4.1)
+    pluginator (1.5.0)
+    pre-commit (0.39.0)
+      pluginator (~> 1.5)
     rainbow (3.0.0)
     rake (13.0.6)
     regexp_parser (2.1.1)
@@ -33,6 +36,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  pre-commit
   rake (~> 13.0)
   rubocop (~> 1.7)
   swallow!

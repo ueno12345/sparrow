@@ -7,5 +7,4 @@ require "pry"
 module Swallow
   parser = AUKParser.new
   parser.instance_eval File.read(ARGV[0]) if ARGV[0]
-  binding.pry
 end
