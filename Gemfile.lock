@@ -26,6 +26,7 @@ GEM
     rubocop-ast (1.13.0)
       parser (>= 3.0.1.1)
     ruby-progressbar (1.11.0)
+    sycamore (0.3.1)
     unicode-display_width (2.1.0)
 
 PLATFORMS
@@ -35,6 +36,7 @@ DEPENDENCIES
   rake (~> 13.0)
   rubocop (~> 1.7)
   swallow!
+  sycamore
 
 BUNDLED WITH
    2.2.24
