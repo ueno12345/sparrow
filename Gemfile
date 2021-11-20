@@ -7,6 +7,7 @@ gemspec
 
 group :development do
   gem "pre-commit", require: false
+  gem "pry"
   gem "rake", "~> 13.0"
   gem "rubocop", "~> 1.7"
 end

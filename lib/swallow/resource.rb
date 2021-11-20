@@ -4,6 +4,15 @@ class Resource
     @domain = Domain.new
     @belongs_to = ""
   end
+
+  def to_auk
+    <<-AUK
+    #{self.class.name.downcase} "#{@name}" do
+      #{@belongs_to.empty? ? nil : "belongs_to #{@belongs_to}"}
+    end
+
+    AUK
+  end
 end
 
 class Period < Resource

@@ -4,6 +4,8 @@ require_relative "resource"
 
 module Swallow
   class AUKParser
+    attr_reader :ast
+
     def initialize
       @ast = AST.new
     end
@@ -11,25 +13,25 @@ module Swallow
     def period(&block)
       period = Period.new
       period.instance_eval(&block)
-      @ast.append period
+      @ast << period
     end
 
     def room(name, &block)
       room = Room.new name
       room.instance_eval(&block)
-      @ast.append room
+      @ast << room
     end
 
     def instructor(name, &block)
       instructor = Instructor.new name
       instructor.instance_eval(&block)
-      @ast.append instructor
+      @ast << instructor
     end
 
     def lecture(name, &block)
       lecture = Lecture.new name
       lecture.instance_eval(&block)
-      @ast.append lecture
+      @ast << lecture
     end
   end
 end
