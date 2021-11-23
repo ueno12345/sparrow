@@ -8,7 +8,7 @@ class Resource
   def to_auk
     <<-AUK
     #{self.class.name.downcase} "#{@name}" do
-      #{@belongs_to.empty? ? nil : "belongs_to #{@belongs_to}"}
+      #{@belongs_to.empty? ? nil : "belongs_to \"#{@belongs_to}\""}
     end
 
     AUK
@@ -22,6 +22,16 @@ class Period < Resource
 
   def nr_periods(num)
     @domain.by_period.nr_periods = num
+  end
+
+  def to_auk
+    <<-AUK
+    #{self.class.name.downcase} do
+      nr_days_a_week #{@domain.by_period.nr_days_a_week}
+      nr_period #{@domain.by_period.nr_periods}
+    end
+
+    AUK
   end
 end
 
