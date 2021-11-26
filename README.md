@@ -1,3 +1,4 @@
+[![Ruby](https://github.com/matsuda0528/swallow/actions/workflows/main.yml/badge.svg)](https://github.com/matsuda0528/swallow/actions/workflows/main.yml)
 # Swallow
 Swallow is University Course Timetabling Problem (UCTTP) Solver with AUK.
 AUK is a Domain Specific Language that can describe UCTTP.
