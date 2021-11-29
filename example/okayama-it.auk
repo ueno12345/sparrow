@@ -14,7 +14,7 @@ end
 
 room "10講義室" do
   belongs_to "講義室"
-  unavaibale start_time: "2020/4/11 10:00",
+  unavailable start_time: "2020/4/11 10:00",
                end_time: "2020/4/11 15:00"
 end
 
