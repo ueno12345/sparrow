@@ -9,7 +9,7 @@ class Resource
 
   def to_auk
     <<~AUK
-      #{self.class.name.downcase} "#{@name}" do
+      #{self.class.name.downcase} #{@name ? "\"#{@name}\"" : nil} do
         #{@domain.to_auk}
         #{@belongs_to.empty? ? nil : "belongs_to \"#{@belongs_to}\""}
       end

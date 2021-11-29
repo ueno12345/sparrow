@@ -19,6 +19,10 @@ room "10講義室" do
 end
 
 room "11講義室" do
+  unavailable start_time: "2020/5/11 10:00",
+               end_time: "2020/5/12 10:00"
+  unavailable start_time: "2020/5/20 13:00",
+               end_time: "2020/5/20 15:00"
   belongs_to "講義室"
 end
 
@@ -27,6 +31,8 @@ room "14講義室" do
 end
 
 room "プログラミング演習室" do
+  unavailable start_time: "2020/6/20 13:00",
+               end_time: "2020/6/23 13:00"
   belongs_to "実験室"
 end
 
@@ -40,6 +46,9 @@ instructor "山内利宏" do
 end
 
 instructor "後藤佑介" do
+  unavailable start_time: "2020/6/20 13:00",
+               end_time: "2020/6/23 13:00"
+  belongs_to "CS"
 end
 
 instructor "佐藤将也" do
@@ -52,6 +61,9 @@ instructor "太田学" do
 end
 
 instructor "乃村能成" do
+  unavailable start_time: "2020/6/20 13:00",
+               end_time: "2020/6/23 13:00"
+  belongs_to "CS"
 end
 
 instructor "高橋規一" do
@@ -91,6 +103,10 @@ lecture "プログラミング言語論" do
 end
 
 lecture "データ構造とアルゴリズム" do
+  rooms "11講義室", "14講義室"
+  instructors "後藤祐介", "山内利宏"
+  period "Mon1", "Mon2", "Mon3", "Mon4"
+  term 1
 end
 
 lecture "グラフ理論" do
