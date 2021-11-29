@@ -1,3 +1,5 @@
+require_relative "domain"
+
 class Resource
   def initialize(name = nil)
     @name = name
@@ -6,10 +8,11 @@ class Resource
   end
 
   def to_auk
-    <<-AUK
-    #{self.class.name.downcase} "#{@name}" do
-      #{@belongs_to.empty? ? nil : "belongs_to \"#{@belongs_to}\""}
-    end
+    <<~AUK
+      #{self.class.name.downcase} "#{@name}" do
+        #{@domain.to_auk}
+        #{@belongs_to.empty? ? nil : "belongs_to \"#{@belongs_to}\""}
+      end
 
     AUK
   end
@@ -17,21 +20,11 @@ end
 
 class Period < Resource
   def nr_days_a_week(num)
-    @domain.by_period.nr_days_a_week = num
+    @domain.add(num, __method__)
   end
 
   def nr_periods(num)
-    @domain.by_period.nr_periods = num
-  end
-
-  def to_auk
-    <<-AUK
-    #{self.class.name.downcase} do
-      nr_days_a_week #{@domain.by_period.nr_days_a_week}
-      nr_period #{@domain.by_period.nr_periods}
-    end
-
-    AUK
+    @domain.add(num, __method__)
   end
 end
 
@@ -40,9 +33,8 @@ class Room < Resource
     @belongs_to = name
   end
 
-  def unavaibale(start_time: nil, end_time: nil)
-    @domain.by_period.start_time = Time.parse start_time
-    @domain.by_period.end_time = Time.parse end_time
+  def unavailable(start_time: nil, end_time: nil)
+    @domain.add(Time.parse(start_time), Time.parse(end_time), __method__)
   end
 end
 
@@ -51,55 +43,29 @@ class Instructor < Resource
     @belongs_to = name
   end
 
-  def unavaibale(start_time: nil, end_time: nil)
-    @domain.by_period.start_time = Time.parse start_time
-    @domain.by_period.end_time = Time.parse end_time
+  def unavailable(start_time: nil, end_time: nil)
+    @domain.add(Time.parse(start_time), Time.parse(end_time), __method__)
   end
 end
 
 class Lecture < Resource
   def rooms(*rooms)
-    @domain.by_room.rooms = rooms
+    @domain.add(rooms, __method__)
   end
 
   def instructors(*instructors)
-    @domain.by_instructor.instructors = instructors
+    @domain.add(instructors, __method__)
   end
 
   def period(*period)
-    @domain.by_period.period = period
+    @domain.add(period, __method__)
   end
 
   def term(term)
-    @domain.by_period.term = term
+    @domain.add(term, __method__)
   end
 
   def belongs_to(name)
     @belongs_to = name
   end
-end
-
-class Domain
-  attr_reader :by_period, :by_room, :by_instructor
-
-  def initialize
-    # @@nr_resources = 0
-    # NOTE:Class Var を使わないような設計をする
-    @constraints = []
-    @by_period = DomainByPeriod.new
-    @by_room = DomainByRoom.new
-    @by_instructor = DomainByInstructor.new
-  end
-end
-
-class DomainByPeriod
-  attr_accessor :nr_days_a_week, :nr_periods, :unavailable, :term, :period, :start_time, :end_time
-end
-
-class DomainByRoom
-  attr_accessor :rooms
-end
-
-class DomainByInstructor
-  attr_accessor :instructors
 end
