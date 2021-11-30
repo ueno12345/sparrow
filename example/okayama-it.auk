@@ -126,3 +126,11 @@ end
 
 lecture "応用解析" do
 end
+
+overlap do
+  lectures "情報理論", "応用解析"
+end
+
+overlap do
+  lectures "プログラミング言語論", "コンピュータハードウェア"
+end
