@@ -3,9 +3,14 @@
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 require "swallow"
 require "pry"
+require "rufo"
 
 module Swallow
   parser = AUKParser.new
   parser.instance_eval File.read(ARGV[0]) if ARGV[0]
-  puts parser.ast.to_auk
+  auk = parser.ast.to_auk
+  # formatting
+  formatter = Rufo::Formatter.new(auk)
+  formatter.format
+  puts formatter.result
 end

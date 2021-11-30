@@ -12,4 +12,5 @@ group :development do
   gem "rubocop", "~> 1.7"
 end
 
+gem "rufo"
 gem "sycamore"
