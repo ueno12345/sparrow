@@ -134,3 +134,7 @@ end
 overlap do
   lectures "プログラミング言語論", "コンピュータハードウェア"
 end
+
+not_overlap do
+  lectures "コンピュータ科学基礎1", "コンピュータ科学基礎2"
+end

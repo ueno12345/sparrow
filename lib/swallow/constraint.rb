@@ -1,3 +1,5 @@
+require "active_support/all"
+
 class Constraint
   def initialize
     @lectures
@@ -9,8 +11,8 @@ class Constraint
 
   def to_auk
     <<~AUK
-      #{self.class.name.downcase} do
-        lecture #{@lectures.map { |i| %("#{i}") }.join(",")}
+      #{self.class.name.underscore} do
+        lectures #{@lectures.map { |i| %("#{i}") }.join(",")}
       end
 
     AUK
