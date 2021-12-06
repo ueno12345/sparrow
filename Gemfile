@@ -13,5 +13,6 @@ group :development do
 end
 
 gem "activesupport"
+gem "ravensat"
 gem "rufo"
 gem "sycamore"
