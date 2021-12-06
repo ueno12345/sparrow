@@ -23,8 +23,11 @@ Or install it yourself as:
     $ gem install swallow
 
 ## Usage
+### Solve for AUK
 
-TODO: Write usage instructions here
+```
+$ swallow [auk_file_path]
+```
 
 ## Development
 
