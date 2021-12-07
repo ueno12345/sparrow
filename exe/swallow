@@ -9,10 +9,11 @@ module Swallow
   # AUK Parser
   parser = AUKParser.new
   parser.instance_eval File.read(ARGV[0]) if ARGV[0]
+  ast = parser.ast
 
   # SAT Encoder
-  ptable = PropTable.instance
-  ptable.create(parser.ast)
+  ptable = PropTable.new(ast)
+  ast.to_dimacs(ptable)
 
   # AUK Generator
   auk = parser.ast.to_auk

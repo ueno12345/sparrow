@@ -1,13 +1,8 @@
-require "singleton"
 require "ravensat"
 
 module Swallow
   class PropTable < Array
-    include Singleton
-
-    def initialize; end
-
-    def create(resources)
+    def initialize(resources)
       # preprocessing
       periods = []
       rooms = []

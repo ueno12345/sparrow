@@ -11,7 +11,7 @@ module Swallow
       auk
     end
 
-    def to_dimacs_cnf
+    def to_dimacs(_prop_table)
       dimacs_cnf = "" # TODO: 基本となる制約（CNF）を初期値として代入
       nodes.each do |node|
         dimacs_cnf << node.to_dimacs_cnf
