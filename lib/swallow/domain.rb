@@ -9,6 +9,12 @@ class Domain < DomainComponent
     @constraints = []
   end
 
+  def include?(constraint)
+    @constraints.reduce(false) do |result, item|
+      result ||= (constraint === item)
+    end
+  end
+
   def add(*domain, method_name)
     case method_name
     when :nr_days_a_week
