@@ -12,9 +12,9 @@ module Swallow
     end
 
     def period(&block)
-      period = Period.new
-      period.instance_eval(&block)
-      @ast << period
+      period_initializer = PeriodInitializer.new
+      period_initializer.instance_eval(&block)
+      @ast << period_initializer
     end
 
     def room(name, &block)

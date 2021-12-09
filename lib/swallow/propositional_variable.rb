@@ -11,8 +11,8 @@ module Swallow
 
       resources.nodes.each do |resource|
         case resource
-        when Period
-          periods << resource
+        when PeriodInitializer # HACK: AST全体にComposite patternを適用する？
+          periods = resource.periods
         when Room
           rooms << resource
         when Instructor

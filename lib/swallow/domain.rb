@@ -5,6 +5,8 @@ class DomainComponent
 end
 
 class Domain < DomainComponent
+  attr_reader :constraints
+
   def initialize
     @constraints = []
   end
