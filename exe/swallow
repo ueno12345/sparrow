@@ -13,7 +13,7 @@ module Swallow
 
   # SAT Encoder
   ptable = PropTable.new(ast)
-  ast.to_dimacs(ptable)
+  # ast.to_cnf(ptable)
 
   # AUK Generator
   auk = parser.ast.to_auk

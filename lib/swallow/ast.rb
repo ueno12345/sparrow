@@ -1,5 +1,6 @@
 require "sycamore/extension"
 # TODO: RubyTree検討
+# NOTE: そもそも，Treeである必要があるか
 
 module Swallow
   class AST < Tree
@@ -11,10 +12,10 @@ module Swallow
       auk
     end
 
-    def to_dimacs(_prop_table)
-      dimacs_cnf = "" # TODO: 基本となる制約（CNF）を初期値として代入
+    def to_cnf(ptable)
+      cnf = Ravensat::PropLogic # TODO: 基本となる制約（CNF）を初期値として代入
       nodes.each do |node|
-        dimacs_cnf << node.to_dimacs_cnf
+        cnf &= node.to_cnf(ptable) # NOTE: Dependency Injection
       end
     end
   end
