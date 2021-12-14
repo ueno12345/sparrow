@@ -1,6 +1,8 @@
 require_relative "domain"
 
 class Resource
+  attr_reader :name
+
   def initialize(name = nil)
     @name = name
     @domain = Domain.new
