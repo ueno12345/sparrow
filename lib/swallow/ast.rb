@@ -12,7 +12,9 @@ module Swallow
       auk
     end
 
-    def to_cnf(ptable)
+    def to_cnf
+      ptable = PropTable.new(self)
+
       cnf = Ravensat::PropLogic # TODO: 基本となる制約（CNF）を初期値として代入
       nodes.each do |node|
         cnf &= node.to_cnf(ptable) # NOTE: Dependency Injection

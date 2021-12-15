@@ -148,5 +148,7 @@ module Swallow
       constraint.instance_eval(&block)
       @ast << constraint
     end
+
+    alias parse instance_eval
   end
 end
