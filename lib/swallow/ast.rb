@@ -1,4 +1,5 @@
 require "sycamore/extension"
+require "ravensat"
 # TODO: RubyTree検討
 # NOTE: そもそも，Treeである必要があるか
 
@@ -15,7 +16,12 @@ module Swallow
     def to_cnf
       ptable = PropTable.new(self)
 
-      cnf = Ravensat::PropLogic # TODO: 基本となる制約（CNF）を初期値として代入
+      # Generate basic constraints
+      # XXX: amoで計算爆発
+      cnf = ptable.group_by { |i| i.room.name }.values.map do |e|
+        Ravensat::RavenClaw.amo e.map(&:value)
+      end.reduce(:&)
+
       nodes.each do |node|
         cnf &= node.to_cnf(ptable) # NOTE: Dependency Injection
       end
