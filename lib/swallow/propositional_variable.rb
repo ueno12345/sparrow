@@ -1,8 +1,14 @@
 require "ravensat"
+require "forwardable"
 
 module Swallow
-  class PropTable < Array
+  class PropTable
+    extend Forwardable
+
+    def_delegators :@table, :select, :to_a, :group_by
+
     def initialize(resources)
+      @table = []
       # preprocessing
       periods = []
       rooms = []
@@ -28,7 +34,7 @@ module Swallow
         rooms.each do |room|
           instructors.each do |instructor|
             lectures.each do |lecture|
-              self << PropVar.new(period, room, instructor, lecture)
+              @table << PropVar.new(period, room, instructor, lecture)
             end
           end
         end
