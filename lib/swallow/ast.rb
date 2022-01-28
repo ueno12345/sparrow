@@ -1,5 +1,6 @@
 require "sycamore/extension"
 require "ravensat"
+require "csv"
 # TODO: RubyTree検討
 # NOTE: そもそも，Treeである必要があるか
 
@@ -25,6 +26,14 @@ module Swallow
       nodes.each do |node|
         cnf &= node.to_cnf(ptable) # NOTE: Dependency Injection
       end
+    end
+
+    def to_csv
+      csv = [] # CSV::Table
+      nodes.each do |node|
+        csv.append [node.name, node.to_csv.period] if node.to_csv
+      end
+      csv.to_csv #TODO: CSVクラスを使用することを検討
     end
   end
 end

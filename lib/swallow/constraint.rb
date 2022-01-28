@@ -17,6 +17,10 @@ class Constraint
 
     AUK
   end
+
+  def to_csv; end
+
+  alias name class
 end
 
 class SameStart < Constraint
