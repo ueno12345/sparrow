@@ -113,6 +113,10 @@ lecture "グラフ理論" do
 end
 
 lecture "プログラミング演習1" do
+  rooms "11講義室", "14講義室"
+  instructors "後藤祐介", "山内利宏"
+  period "Wed1", "Wed2", "Wed3", "Wed4"
+  term 1
 end
 
 lecture "プログラミング演習2" do
