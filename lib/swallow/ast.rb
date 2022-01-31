@@ -31,9 +31,22 @@ module Swallow
     def to_csv
       csv = [] # CSV::Table
       nodes.each do |node|
-        csv.append [node.name, node.to_csv.period] if node.to_csv
+        csv.append [node.name] + node.to_csv.period if node.to_csv
       end
-      csv.to_csv #TODO: CSVクラスを使用することを検討
+      # TODO: CSVクラスを使用することを検討
+      csv.map(&:to_csv).reduce { |result, item| "#{result}#{item}\n" }.chomp
+    end
+
+    def to_html
+      # TODO: Nokogiriを使用する
+      html = ""
+      nodes.each do |node|
+        next unless node.is_a? Lecture
+
+        period = node.to_csv.period if node.to_csv
+        p period
+      end
+      html
     end
   end
 end
