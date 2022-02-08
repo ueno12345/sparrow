@@ -18,7 +18,7 @@ class Constraint
     AUK
   end
 
-  def to_csv; end
+  def domain_period; end
 
   alias name class
 end

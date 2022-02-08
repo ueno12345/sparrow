@@ -36,14 +36,14 @@ module Swallow
     def format(ast)
       csv = [] # CSV::Table
       ast.nodes.each do |node|
-        csv.append [node.name] + node.to_csv.period if node.to_csv
+        csv.append [node.name] + node.domain_period.period if node.domain_period
       end
       # TODO: CSVクラスを使用することを検討
       csv.map(&:to_csv).reduce { |result, item| "#{result}#{item}\n" }.chomp
     end
   end
 
-  class HTMLFormatter
+  class HTMLFormatter < Formatter
     def format(ast)
       # TODO: Nokogiriを使用する
       nr_periods = 8
@@ -55,7 +55,7 @@ module Swallow
         next unless node.is_a? Lecture
 
         lecture = node.name
-        period = node.to_csv.period if node.to_csv
+        period = node.domain_period.period if node.domain_period
         lec_periods.append [lecture, period].flatten
       end
       root = Nokogiri::HTML::DocumentFragment.parse("")

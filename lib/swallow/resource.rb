@@ -21,7 +21,7 @@ class Resource
 
   def to_cnf(ptable); end
 
-  def to_csv; end
+  def domain_period; end
 end
 
 class PeriodInitializer < Resource
@@ -104,7 +104,7 @@ class Lecture < Resource
     @belongs_to = name
   end
 
-  def to_csv
+  def domain_period
     @domain.constraints.select { |i| i.is_a?(DomainPeriod) }.first # NOTE: DomainPeriodにマッチする要素はただ一つになる前提
   end
 end
