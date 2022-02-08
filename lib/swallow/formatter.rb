@@ -1,4 +1,5 @@
 require "ravensat"
+require 'nokogiri'
 
 module Swallow
   class Formatter
@@ -45,15 +46,47 @@ module Swallow
   class HTMLFormatter
     def format(ast)
       # TODO: Nokogiriを使用する
-      html = ""
+      nr_periods = 8
+      nr_days = 5
+      days_table = ["Mon", "Tue", "Wed", "Thu", "Fri"]
+      lec_periods = []
+
       ast.nodes.each do |node|
         next unless node.is_a? Lecture
 
         lecture = node.name
         period = node.to_csv.period if node.to_csv
-        p [lecture, period]
+        lec_periods.append [lecture, period].flatten
+
       end
-      html
+      root = Nokogiri::HTML::DocumentFragment.parse("")
+      Nokogiri::HTML::Builder.with(root) do |doc|
+        doc.div.nav.index do
+          doc.h1 "Time Table"
+          doc.table do
+            nr_periods.times do |pr|
+              doc.tr do
+                nr_days.times do |dy|
+                  id = "#{days_table[dy]}#{pr+1}"
+                  td = []
+                  lec_periods.each do |lec_pr|
+                    td.append lec_pr.first if lec_pr.include? id
+                  end
+                  doc.td td, id: id
+                end
+              end
+            end
+          end
+
+          # doc.br # これだと<br>になる
+          # doc << "<br />" # ノードを挿入する場合
+          # doc.text "<br />\n" # テキストノードとして挿入する場合(自動的にエスケープされる)
+            # lec_periods.each.with_index do |x, i|
+            #   doc.li x, class: "item-list", id: i
+            # end
+        end
+      end
+      root.to_html
     end
   end
 end
