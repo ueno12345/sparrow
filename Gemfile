@@ -13,7 +13,7 @@ group :development do
 end
 
 gem "activesupport"
+gem "nokogiri"
 gem "ravensat"
 gem "rufo"
 gem "sycamore"
-gem "nokogiri"
