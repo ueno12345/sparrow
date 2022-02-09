@@ -1,5 +1,6 @@
 require "ravensat"
 require "nokogiri"
+require "rufo"
 
 module Swallow
   class Formatter
@@ -12,7 +13,9 @@ module Swallow
       ast.nodes.each do |node|
         auk << node.to_auk
       end
-      auk
+      formatter = Rufo::Formatter.new(auk)
+      formatter.format
+      formatter.result
     end
   end
 
