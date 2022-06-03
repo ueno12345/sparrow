@@ -9,9 +9,13 @@ class Resource
     @belongs_to = ""
   end
 
+  def block_name
+    self.class.name.downcase
+  end
+
   def to_auk
     <<~AUK
-      #{self.class.name.downcase} #{@name ? "\"#{@name}\"" : nil} do
+      #{block_name} #{@name ? "\"#{@name}\"" : nil} do
         #{@domain.to_auk}
         #{@belongs_to.empty? ? nil : "belongs_to \"#{@belongs_to}\""}
       end
@@ -30,6 +34,10 @@ class PeriodInitializer < Resource
   def initialize(name = nil)
     super
     @periods = []
+  end
+
+  def block_name
+    "initialize"
   end
 
   def nr_days_a_week(num)
