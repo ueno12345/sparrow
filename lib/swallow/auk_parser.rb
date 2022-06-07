@@ -1,7 +1,7 @@
 require "time"
 require_relative "ast"
 require_relative "resource"
-require_relative "constraint"
+require_relative "constraint/constraint"
 
 module Swallow
   class AUKParser

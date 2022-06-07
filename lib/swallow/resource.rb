@@ -1,4 +1,4 @@
-require_relative "domain"
+require_relative "constraint/domain"
 
 class Resource
   attr_reader :name
