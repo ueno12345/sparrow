@@ -46,7 +46,7 @@ module Swallow
     attr_reader :value, :period, :room, :instructor, :lecture
 
     def initialize(period, room, instructor, lecture)
-      @value = Ravensat::PropVar.new
+      @value = Ravensat::VarNode.new
       @period = period
       @room = room
       @instructor = instructor
