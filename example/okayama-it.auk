@@ -94,41 +94,55 @@ instructor "上野史" do
 end
 
 lecture "コンピュータ科学基礎1" do
+  rooms "11講義室", "14講義室"
 end
 
 lecture "コンピュータ科学基礎2" do
+  rooms "11講義室", "14講義室"
 end
 
 lecture "プログラミング言語論" do
+  rooms "11講義室", "14講義室"
+  instructors "後藤佑介"
 end
 
 lecture "データ構造とアルゴリズム" do
   rooms "11講義室", "14講義室"
-  instructors "後藤祐介", "山内利宏"
+  instructors "後藤佑介", "山内利宏"
   period "Mon1", "Mon2", "Mon3", "Mon4"
   term 1
 end
 
 lecture "グラフ理論" do
+  rooms "11講義室", "14講義室"
+  instructors "後藤佑介", "山内利宏"
 end
 
 lecture "プログラミング演習1" do
-  rooms "11講義室", "14講義室"
-  instructors "後藤祐介", "山内利宏"
+  rooms "プログラミング演習室"
+  instructors "後藤佑介", "山内利宏"
   period "Wed1", "Wed2", "Wed3", "Wed4"
   term 1
 end
 
 lecture "プログラミング演習2" do
+  rooms "プログラミング演習室"
+  instructors "後藤佑介", "山内利宏"
 end
 
 lecture "コンピュータハードウェア" do
+  rooms "11講義室", "14講義室"
+  instructors "後藤佑介", "山内利宏"
 end
 
 lecture "情報理論" do
+  rooms "11講義室", "14講義室"
+  instructors "後藤佑介", "山内利宏"
 end
 
 lecture "応用解析" do
+  rooms "11講義室", "14講義室"
+  instructors "高橋規一"
 end
 
 overlap do

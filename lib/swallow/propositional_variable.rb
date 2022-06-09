@@ -4,8 +4,9 @@ require "forwardable"
 module Swallow
   class PropTable
     extend Forwardable
+    include Enumerable
 
-    def_delegators :@table, :select, :to_a, :group_by
+    def_delegators :@table, :each, :size, :reject!
 
     def initialize(resources)
       @table = []

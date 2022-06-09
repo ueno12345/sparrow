@@ -23,15 +23,26 @@ module Swallow
     def format(ast)
       ptable = PropTable.new(ast)
 
+      # Domain constraint
+      ast.nodes.each do |node|
+        node.prun(ptable)
+      end
+
+
       # Generate basic constraints
       # XXX: amoで計算爆発
-      cnf = ptable.group_by { |i| i.room.name }.values.map do |e|
+      # cnf = ptable.group_by { |i| i.room.name }.values.map do |e|
+      #   Ravensat::RavenClaw.amo e.map(&:value)
+      # end.reduce(:&)
+
+      cnf = ptable.group_by{|i| i.lecture.name}.values.map do |e|
         Ravensat::RavenClaw.amo e.map(&:value)
       end.reduce(:&)
+      binding.pry
 
-      ast.nodes.each do |node|
-        cnf &= node.to_cnf(ptable) # NOTE: Dependency Injection
-      end
+      # ast.nodes.each do |node|
+      #   cnf &= node.to_cnf(ptable) # NOTE: Dependency Injection
+      # end
     end
   end
 

@@ -23,6 +23,10 @@ class Resource
     AUK
   end
 
+  def prun(ptable)
+    @domain.prun(ptable, self)
+  end
+
   def to_cnf(ptable); end
 
   def domain_period; end
@@ -30,6 +34,7 @@ end
 
 class PeriodInitializer < Resource
   attr_reader :periods
+  WTABLE = ["Mon", "Tue", "Wed", "Thu", "Fri"]
 
   def initialize(name = nil)
     super
@@ -57,7 +62,7 @@ class PeriodInitializer < Resource
 
     @domain.constraints.first.nr_days_a_week.to_i.times do |day|
       @domain.constraints.last.nr_periods.to_i.times do |period|
-        @periods << Period.new("#{day + 1}-#{period + 1}")
+        @periods << Period.new("#{WTABLE[day]}#{period + 1}")
       end
     end
   end

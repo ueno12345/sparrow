@@ -2,6 +2,8 @@ class DomainComponent
   def initialize; end
 
   def to_auk; end
+
+  def prun(ptable, parent); end
 end
 
 class Domain < DomainComponent
@@ -49,6 +51,12 @@ class Domain < DomainComponent
     end
     auk
   end
+
+  def prun(ptable, parent)
+    @constraints.each do |constraint|
+      constraint.prun(ptable, parent)
+    end
+  end
 end
 
 class DomainNrDays < DomainComponent
@@ -90,6 +98,10 @@ class DomainPeriod < DomainComponent
     <<~AUK
       period #{@period.map { |i| %("#{i}") }.join(",")}
     AUK
+  end
+
+  def prun(ptable, parent)
+    ptable.reject!{|i| (parent.name == i.lecture.name) && !@period.include?(i.period.name)}
   end
 end
 
@@ -133,6 +145,10 @@ class DomainRooms < DomainComponent
       rooms #{@rooms.map { |i| %("#{i}") }.join(",")}
     AUK
   end
+
+  def prun(ptable, parent)
+    ptable.reject!{|i| (parent.name == i.lecture.name) && !@rooms.include?(i.room.name)}
+  end
 end
 
 class DomainInstructors < DomainComponent
@@ -144,5 +160,9 @@ class DomainInstructors < DomainComponent
     <<~AUK
       instructors #{@instructors.map { |i| %("#{i}") }.join(",")}
     AUK
+  end
+
+  def prun(ptable, parent)
+    ptable.reject!{|i| (parent.name == i.lecture.name) && !@instructors.include?(i.instructor.name)}
   end
 end
