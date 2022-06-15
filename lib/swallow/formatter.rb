@@ -36,7 +36,7 @@ module Swallow
       # end.reduce(:&)
 
       cnf = ptable.group_by{|i| i.lecture.name}.values.map do |e|
-        Ravensat::RavenClaw.amo e.map(&:value)
+        Ravensat::Claw.commander_amo e.map(&:value)
       end.reduce(:&)
       binding.pry
 
