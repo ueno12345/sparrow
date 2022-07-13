@@ -9,11 +9,25 @@ module Swallow
   parser = AUKParser.new
   parser.parse File.read(ARGV[0]) if ARGV[0]
   ast = parser.ast
+  ptable = PropTable.new(ast)
 
   # SAT Encoder
-  binding.pry
-  # puts ast.to_html
+  formula = ast.to_cnf(ptable)
 
+  # Solving
+  solver = Ravensat::Solver.new("minisat")
+  solver.solve formula
+
+  ptable.select { |i| i.value.value }.each do |e|
+    domain = Domain.new
+    domain.add([e.room.name], :rooms)
+    domain.add([e.instructor.name], :instructors)
+    domain.add([e.period.name], :period)
+
+    e.lecture.domain = domain
+  end
+
+  binding.pry
   # AUK Generator
   # auk = parser.ast.to_auk
   # puts auk

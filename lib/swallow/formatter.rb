@@ -20,9 +20,7 @@ module Swallow
   end
 
   class CNFFormatter < Formatter
-    def format(ast)
-      ptable = PropTable.new(ast)
-
+    def format(ast, ptable)
       # Domain constraint
       ast.nodes.each do |node|
         node.prun(ptable)
@@ -35,14 +33,20 @@ module Swallow
       #   Ravensat::RavenClaw.amo e.map(&:value)
       # end.reduce(:&)
 
-      cnf = ptable.group_by{|i| i.lecture.name}.values.map do |e|
+      cnf = Ravensat::InitialNode.new
+
+      # Exactly One lecture
+      cnf &= ptable.group_by{|i| i.lecture.name}.values.map do |e|
+        Ravensat::Claw.alo e.map(&:value)
+      end.reduce(:&)
+      cnf &= ptable.group_by{|i| i.lecture.name}.values.map do |e|
         Ravensat::Claw.commander_amo e.map(&:value)
       end.reduce(:&)
-      binding.pry
 
       # ast.nodes.each do |node|
       #   cnf &= node.to_cnf(ptable) # NOTE: Dependency Injection
       # end
+      cnf
     end
   end
 

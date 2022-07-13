@@ -11,9 +11,9 @@ module Swallow
       auk_formatter.format self
     end
 
-    def to_cnf
+    def to_cnf(ptable)
       cnf_formatter = CNFFormatter.new
-      cnf_formatter.format self
+      cnf_formatter.format(self, ptable)
     end
 
     def to_csv
