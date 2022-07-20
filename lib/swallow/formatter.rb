@@ -26,13 +26,6 @@ module Swallow
         node.prun(ptable)
       end
 
-
-      # Generate basic constraints
-      # XXX: amoで計算爆発
-      # cnf = ptable.group_by { |i| i.room.name }.values.map do |e|
-      #   Ravensat::RavenClaw.amo e.map(&:value)
-      # end.reduce(:&)
-
       cnf = Ravensat::InitialNode.new
 
       # Exactly One lecture
@@ -43,9 +36,25 @@ module Swallow
         Ravensat::Claw.commander_amo e.map(&:value)
       end.reduce(:&)
 
-      # ast.nodes.each do |node|
-      #   cnf &= node.to_cnf(ptable) # NOTE: Dependency Injection
-      # end
+      # Conflict between teachers
+      cnf &= ptable.group_by{|i| i.instructor.name}.values.map do |e|
+        e.group_by{|i| i.period.name}.values.map do |l|
+          Ravensat::Claw.commander_amo l.map(&:value)
+        end.reduce(:&)
+      end.reduce(:&)
+
+      # Conflict between rooms
+      cnf &= ptable.group_by{|i| i.room.name}.values.map do |e|
+        e.group_by{|i| i.period.name}.values.map do |l|
+          Ravensat::Claw.pairwise_amo l.map(&:value)
+        end.reduce(:&)
+      end.reduce(:&)
+
+      # Conflict Constraints
+      ast.nodes.each do |node|
+        node.exec(ptable) if node.is_a? Constraint
+      end
+
       cnf
     end
   end
@@ -78,11 +87,19 @@ module Swallow
       end
       root = Nokogiri::HTML::DocumentFragment.parse("")
       Nokogiri::HTML::Builder.with(root) do |doc|
+        doc.link rel: "stylesheet", href: "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"
         doc.div.nav.index do
           doc.h1 "Time Table"
-          doc.table do
+          doc.table class: "table table-bordered" do
+            doc.tr do
+              doc.th nil
+              nr_days.times do |dy|
+                doc.th days_table[dy]
+              end
+            end
             nr_periods.times do |pr|
               doc.tr do
+                doc.th pr + 1
                 nr_days.times do |dy|
                   id = "#{days_table[dy]}#{pr + 1}"
                   td = []
