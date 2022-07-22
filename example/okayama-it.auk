@@ -145,6 +145,105 @@ lecture "応用解析" do
   instructors "高橋規一"
 end
 
+lecture "オペレーティングシステム" do
+end
+
+lecture "コンピュータアーキテクチャ1" do
+end
+
+lecture "システムプログラミング1" do
+end
+
+lecture "システムプログラミング2" do
+end
+
+lecture "応用数学" do
+end
+
+lecture "論理設計" do
+end
+
+lecture "コンピュータアーキテクチャ2" do
+end
+
+lecture "プログラミング技法" do
+end
+
+lecture "非手続き型言語" do
+end
+
+lecture "人工知能" do
+end
+
+lecture "情報工学実験A" do
+end
+
+lecture "ソフトウェア設計" do
+end
+
+lecture "情報ネットワーク論" do
+end
+
+lecture "情報工学実験B" do
+end
+
+lecture "ネットワークシステム" do
+end
+
+lecture "情報工学実験C" do
+end
+
+lecture "パターン認識と学習" do
+end
+
+lecture "データベース" do
+end
+
+lecture "コンピュータシステム" do
+end
+
+lecture "応用線形代数" do
+end
+
+lecture "オートマトンと言語理論" do
+end
+
+lecture "数理論理学" do
+end
+
+lecture "言語解析論" do
+end
+
+lecture "コンピュータグラフィックス" do
+end
+
+lecture "制御論" do
+end
+
+lecture "ソフトウェア工学" do
+end
+
+lecture "ディジタル信号処理" do
+end
+
+lecture "アルゴリズムと計算量" do
+end
+
+lecture "映像メディア処理" do
+end
+
+lecture "コンパイラ" do
+end
+
+lecture "画像処理基礎" do
+end
+
+lecture "知識工学" do
+end
+
+lecture "3次元画像処理" do
+end
+
 overlap do
   lectures "情報理論", "応用解析"
 end
@@ -155,4 +254,8 @@ end
 
 not_overlap do
   lectures "コンピュータ科学基礎1", "コンピュータ科学基礎2"
+end
+
+not_overlap do
+  lectures "応用解析", "プログラミング演習2", "プログラミング言語論"
 end
