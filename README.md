@@ -8,25 +8,27 @@ An interface to SAT Solver is provided by [Ravensat](https://github.com/matsuda0
 
 ## Installation
 
-Add this line to your application's Gemfile:
+### SAT solver install
+Install Minisat for Linux(Debian):
 
-```ruby
-gem 'swallow'
-```
+    $ sudo apt install minisat
 
-And then execute:
+for MacOS:
 
-    $ bundle install
+    $ brew install minisat
 
-Or install it yourself as:
+Install from GitHub: See [Minisat(GitHub)](https://github.com/niklasso/minisat)
 
-    $ gem install swallow
+### swallow setup
+After cloning this repository, set it up with the following command.
+
+    $ ./bin/setup
 
 ## Usage
 ### Solve for AUK
 
 ```
-$ swallow [auk_file_path]
+$ ruby exe/swallow [auk_file_path]
 ```
 
 ## Development
