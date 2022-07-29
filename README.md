@@ -25,8 +25,12 @@ After cloning this repository, set it up with the following command.
     $ ./bin/setup
 
 ## Usage
-### Solve for AUK
 
+    Usage: swallow [options]
+            --output=[VALUE]             auk | html | csv (default: auk)
+
+### Solve for AUK
+AUK file samples are located under `example/`.
 ```
 $ ruby exe/swallow [auk_file_path]
 ```
