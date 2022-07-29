@@ -6,10 +6,11 @@ require "optparse"
 require "pry"
 
 module Swallow
-  option={:output => 'auk'}
+  option={:output => 'auk', :log => false}
   OptionParser.new do |opt|
     opt.banner = "Usage: swallow [options] [auk_file]"
     opt.on('--output=[VALUE]', ['auk', 'html', 'csv'] ,'auk | html | csv (default: auk)'){|v| option[:output] = v}
+    opt.on('-l', '--log', 'solver log (default: false)'){|v| option[:log] = v}
     opt.parse!(ARGV)
   end
 
@@ -24,7 +25,7 @@ module Swallow
 
   # Solving
   solver = Ravensat::Solver.new("minisat")
-  solver.solve formula
+  solver.solve formula, solver_log: option[:log]
 
   ptable.select { |i| i.value.value }.each do |e|
     domain = Domain.new

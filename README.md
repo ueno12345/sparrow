@@ -28,6 +28,7 @@ After cloning this repository, set it up with the following command.
 
     Usage: swallow [options] [auk_file]
             --output=[VALUE]             auk | html | csv (default: auk)
+        -l, --log                        solver log (default: false)
 
 ### Solve for AUK
 AUK file samples are located under `example/`.
