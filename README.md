@@ -26,7 +26,7 @@ After cloning this repository, set it up with the following command.
 
 ## Usage
 
-    Usage: swallow [options]
+    Usage: swallow [options] [auk_file]
             --output=[VALUE]             auk | html | csv (default: auk)
 
 ### Solve for AUK

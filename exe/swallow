@@ -8,6 +8,7 @@ require "pry"
 module Swallow
   option={:output => 'auk'}
   OptionParser.new do |opt|
+    opt.banner = "Usage: swallow [options] [auk_file]"
     opt.on('--output=[VALUE]', ['auk', 'html', 'csv'] ,'auk | html | csv (default: auk)'){|v| option[:output] = v}
     opt.parse!(ARGV)
   end
