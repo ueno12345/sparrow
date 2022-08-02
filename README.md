@@ -27,14 +27,14 @@ After cloning this repository, set it up with the following command.
 ## Usage
 
     Usage: swallow [options] <auk_file>
-        -l, --log                                           (default: false)
-            --output=[VALUE]             [auk | html | csv] (default: auk)
+        -d, --debug                                         (default: false)
+            --format=[VALUE]             [auk | html | csv] (default: auk)
             --solver=[VALUE]             <solver name>      (default: minisat)
 
 ### Solve for AUK
 AUK file samples are located under `example/`.
 ```
-$ ruby exe/swallow [auk_file_path]
+$ ruby exe/swallow AUK_FILE_PATH
 ```
 
 ## Development

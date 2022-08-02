@@ -6,12 +6,12 @@ require "optparse"
 require "pry"
 
 module Swallow
-  option={:output => 'auk', :solver => 'minisat', :log => false}
+  option={:format => 'auk', :solver => 'minisat', :debug => false}
 
   OptionParser.new do |opt|
     opt.banner = "Usage: swallow [options] <auk_file>"
-    opt.on('-l', '--log', '                   (default: false)'){|v| option[:log] = v}
-    opt.on('--output=[VALUE]', ['auk', 'html', 'csv'] ,'[auk | html | csv] (default: auk)'){|v| option[:output] = v}
+    opt.on('-d', '--debug', '                   (default: false)'){|v| option[:debug] = v}
+    opt.on('--format=[VALUE]', ['auk', 'html', 'csv'] ,'[auk | html | csv] (default: auk)'){|v| option[:format] = v}
     opt.on('--solver=[VALUE]', '<solver name>      (default: minisat)'){|v| option[:solver] = v}
 
     opt.parse!(ARGV)
@@ -28,7 +28,7 @@ module Swallow
 
   # Solving
   solver = Ravensat::Solver.new(option[:solver])
-  solver.solve formula, solver_log: option[:log]
+  solver.solve formula, solver_log: option[:debug]
 
   ptable.select { |i| i.value.value }.each do |e|
     domain = Domain.new
@@ -40,7 +40,7 @@ module Swallow
   end
 
   # AUK Generator
-  case option[:output]
+  case option[:format]
   when 'auk' then puts ast.to_auk
   when 'html' then puts ast.to_html
   when 'csv' then puts ast.to_csv
