@@ -11,8 +11,8 @@ module Swallow
   OptionParser.new do |opt|
     opt.banner = "Usage: swallow [options] <auk_file>"
     opt.on('-d', '--debug', '                   (default: false)'){|v| option[:debug] = v}
-    opt.on('--format=[VALUE]', ['auk', 'html', 'csv'] ,'[auk | html | csv] (default: auk)'){|v| option[:format] = v}
-    opt.on('--solver=[VALUE]', '<solver name>      (default: minisat)'){|v| option[:solver] = v}
+    opt.on('-f', '--format [VALUE]', ['auk', 'html', 'csv'] ,'[auk | html | csv] (default: auk)'){|v| option[:format] = v}
+    opt.on('-s', '--solver [VALUE]', '<solver name>      (default: minisat)'){|v| option[:solver] = v}
 
     opt.parse!(ARGV)
   end
