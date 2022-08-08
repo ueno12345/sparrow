@@ -26,10 +26,10 @@ After cloning this repository, set it up with the following command.
 
 ## Usage
 
-    Usage: swallow [options] <auk_file>
-        -d, --debug                                         (default: false)
-            --format=[VALUE]             [auk | html | csv] (default: auk)
-            --solver=[VALUE]             <solver name>      (default: minisat)
+  Usage: swallow [options] <auk_file>
+    -d, --debug                                         (default: false)
+    -f, --format [VALUE]             [auk | html | csv] (default: auk)
+    -s, --solver [VALUE]             <solver name>      (default: minisat)
 
 ### Solve for AUK
 AUK file samples are located under `example/`.
