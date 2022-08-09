@@ -3,16 +3,17 @@
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 require "swallow"
 require "optparse"
-require "pry"
 
 module Swallow
-  option={:format => 'auk', :solver => 'minisat', :debug => false}
+  option = { format: "auk", solver: "minisat", debug: false }
 
   OptionParser.new do |opt|
     opt.banner = "Usage: swallow [options] <auk_file>"
-    opt.on('-d', '--debug', '                   (default: false)'){|v| option[:debug] = v}
-    opt.on('-f', '--format [VALUE]', ['auk', 'html', 'csv'] ,'[auk | html | csv] (default: auk)'){|v| option[:format] = v}
-    opt.on('-s', '--solver [VALUE]', '<solver name>      (default: minisat)'){|v| option[:solver] = v}
+    opt.on("-d", "--debug", "                       (default: false)") { |v| option[:debug] = v }
+    opt.on("-f", "--format [VALUE]", ["auk", "html", "csv"], "[auk | html | csv]     (default: auk)") do |v|
+      option[:format] = v
+    end
+    opt.on("-s", "--solver [VALUE]", "<solver name>          (default: minisat)") { |v| option[:solver] = v }
 
     opt.parse!(ARGV)
   end
@@ -41,8 +42,8 @@ module Swallow
 
   # AUK Generator
   case option[:format]
-  when 'auk' then puts ast.to_auk
-  when 'html' then puts ast.to_html
-  when 'csv' then puts ast.to_csv
+  when "auk" then puts ast.to_auk
+  when "html" then puts ast.to_html
+  when "csv" then puts ast.to_csv
   end
 end
