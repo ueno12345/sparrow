@@ -19,22 +19,26 @@ class Domain < DomainComponent
     end
   end
 
-  def add(*domain, method_name)
+  def add(domain, method_name)
     case method_name
-    when :nr_days_a_week
-      constraint = DomainNrDays.new(domain.first)
-    when :nr_periods
-      constraint = DomainNrPeriods.new(domain.first)
-    when :unavailable
-      constraint = DomainUnavailable.new(domain.first, domain.last)
-    when :rooms
-      constraint = DomainRooms.new(domain.first)
-    when :instructors
-      constraint = DomainInstructors.new(domain.first)
+    # when :nr_days_a_week
+    #   constraint = DomainNrDays.new(domain.first)
+    # when :nr_periods
+    #   constraint = DomainNrPeriods.new(domain.first)
+    when :wday
+      constraint = DomainWday.new(domain)
     when :period
-      constraint = DomainPeriod.new(domain.first)
+      constraint = DomainPeriod.new(domain)
+    when :unavailable
+      constraint = DomainUnavailable.new(domain)
+    when :rooms
+      constraint = DomainRooms.new(domain)
+    when :instructors
+      constraint = DomainInstructors.new(domain)
+    when :timeslots
+      constraint = DomainTimeslots.new(domain)
     when :term
-      constraint = DomainTerm.new(domain.first)
+      constraint = DomainTerm.new(domain)
     end
 
     @constraints << constraint
@@ -59,49 +63,75 @@ class Domain < DomainComponent
   end
 end
 
-class DomainNrDays < DomainComponent
-  attr_reader :nr_days_a_week
+# class DomainNrDays < DomainComponent
+#   attr_reader :nr_days_a_week
 
-  def initialize(nr_days_a_week)
-    @nr_days_a_week = nr_days_a_week
+#   def initialize(nr_days_a_week)
+#     @nr_days_a_week = nr_days_a_week
+#   end
+
+#   def to_auk
+#     <<~AUK
+#       nr_days_a_week #{@nr_days_a_week}
+#     AUK
+#   end
+# end
+
+# class DomainNrPeriods < DomainComponent
+#   attr_reader :nr_periods
+
+#   def initialize(nr_periods)
+#     @nr_periods = nr_periods
+#   end
+
+#   def to_auk
+#     <<~AUK
+#       nr_periods #{@nr_periods}
+#     AUK
+#   end
+# end
+
+class DomainWday < DomainComponent
+  attr_reader :wdays
+
+  def initialize(wdays)
+    @wdays = wdays
   end
 
   def to_auk
     <<~AUK
-      nr_days_a_week #{@nr_days_a_week}
-    AUK
-  end
-end
-
-class DomainNrPeriods < DomainComponent
-  attr_reader :nr_periods
-
-  def initialize(nr_periods)
-    @nr_periods = nr_periods
-  end
-
-  def to_auk
-    <<~AUK
-      nr_periods #{@nr_periods}
+      wday #{@wdays.map { |i| %("#{i}") }.join(",")}
     AUK
   end
 end
 
 class DomainPeriod < DomainComponent
-  attr_reader :period
-
-  def initialize(period)
-    @period = period
+  def initialize(periods)
+    @periods = periods
   end
 
   def to_auk
     <<~AUK
-      period #{@period.map { |i| %("#{i}") }.join(",")}
+      period #{@periods.map { |i| %("#{i}") }.join(",")}
+    AUK
+  end
+end
+
+class DomainTimeslots < DomainComponent
+  attr_reader :timeslots
+
+  def initialize(timeslots)
+    @timeslots = timeslots
+  end
+
+  def to_auk
+    <<~AUK
+      timeslots #{@timeslots.map { |i| %("#{i}") }.join(",")}
     AUK
   end
 
   def prun(ptable, parent)
-    ptable.reject!{|i| (parent.name == i.lecture.name) && !@period.include?(i.period.name)}
+    ptable.reject!{|i| (parent.name == i.lecture.name) && !@timeslots.include?(i.timeslot.name)}
   end
 end
 
@@ -120,17 +150,15 @@ class DomainTerm < DomainComponent
 end
 
 class DomainUnavailable < DomainComponent
-  attr_reader :start_time, :end_time
+  attr_reader :unavailable_timeslots
 
-  def initialize(start_time, end_time)
-    @start_time = start_time
-    @end_time = end_time
+  def initialize(unavailable_timeslots)
+    @unavailable_timeslots = unavailable_timeslots
   end
 
   def to_auk
     <<~AUK
-      unavailable start_time: "#{@start_time.strftime("%Y/%m/%d %H:%M")}",
-                  end_time: "#{@end_time.strftime("%Y/%m/%d %H:%M")}"
+      unavailable #{@unavailable_timeslots.map { |i| %("#{i}") }.join(",")}
     AUK
   end
 end

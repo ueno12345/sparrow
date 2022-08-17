@@ -35,7 +35,7 @@ module Swallow
     domain = Domain.new
     domain.add([e.room.name], :rooms)
     domain.add([e.instructor.name], :instructors)
-    domain.add([e.period.name], :period)
+    domain.add([e.timeslot.name], :timeslots)
 
     e.lecture.domain = domain
   end

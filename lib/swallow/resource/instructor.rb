@@ -3,7 +3,7 @@ class Instructor < Resource
     @belongs_to = name
   end
 
-  def unavailable(start_time: nil, end_time: nil)
-    @domain.add(Time.parse(start_time), Time.parse(end_time), __method__)
+  def unavailable(*timeslots)
+    @domain.add(timeslots, __method__)
   end
 end

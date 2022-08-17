@@ -38,15 +38,15 @@ module Swallow
 
       # Conflict between teachers
       cnf &= ptable.group_by{|i| i.instructor.name}.values.map do |e|
-        e.group_by{|i| i.period.name}.values.map do |l|
+        e.group_by{|i| i.timeslot.name}.values.map do |l|
           Ravensat::Claw.commander_amo l.map(&:value)
         end.reduce(:&)
       end.reduce(:&)
 
       # Conflict between rooms
       cnf &= ptable.group_by{|i| i.room.name}.values.map do |e|
-        e.group_by{|i| i.period.name}.values.map do |l|
-          Ravensat::Claw.pairwise_amo l.map(&:value)
+        e.group_by{|i| i.timeslot.name}.values.map do |l|
+          Ravensat::Claw.commander_amo l.map(&:value)
         end.reduce(:&)
       end.reduce(:&)
 

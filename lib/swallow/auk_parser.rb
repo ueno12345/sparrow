@@ -11,10 +11,10 @@ module Swallow
       @ast = AST.new
     end
 
-    def period(&block)
-      period_initializer = PeriodInitializer.new
-      period_initializer.instance_eval(&block)
-      @ast << period_initializer
+    def timeslot(&block)
+      timeslot_initializer = TimeslotInitializer.new
+      timeslot_initializer.instance_eval(&block)
+      @ast << timeslot_initializer
     end
 
     def room(name, &block)

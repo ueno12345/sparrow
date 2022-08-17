@@ -7,13 +7,21 @@ class Lecture < Resource
     @domain.add(instructors, __method__)
   end
 
-  def period(*period)
-    @domain.add(period, __method__)
+  def timeslots(*timeslots)
+    @domain.add(timeslots, __method__)
   end
 
-  def term(term)
-    @domain.add(term, __method__)
+  def frequenct(num)
+    @domain.add(num, __method__)
   end
+
+  def consecutive(num)
+    @domain.add(num, __method__)
+  end
+
+  # def term(term)
+  #   @domain.add(term, __method__)
+  # end
 
   def belongs_to(name)
     @belongs_to = name

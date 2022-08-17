@@ -11,15 +11,15 @@ module Swallow
     def initialize(resources)
       @table = []
       # preprocessing
-      periods = []
+      timeslots = []
       rooms = []
       instructors = []
       lectures = []
 
       resources.nodes.each do |resource|
         case resource
-        when PeriodInitializer # HACK: AST全体にComposite patternを適用する？
-          periods = resource.periods
+        when TimeslotInitializer # HACK: AST全体にComposite patternを適用する？
+          timeslots = resource.timeslots
         when Room
           rooms << resource
         when Instructor
@@ -31,11 +31,11 @@ module Swallow
 
       # create table
       # HACK: Array, Enumeratableのメソッドを使って読みやすく書けそう
-      periods.each do |period|
+      timeslots.each do |timeslot|
         rooms.each do |room|
           instructors.each do |instructor|
             lectures.each do |lecture|
-              @table << PropVar.new(period, room, instructor, lecture)
+              @table << PropVar.new(timeslot, room, instructor, lecture)
             end
           end
         end
@@ -44,11 +44,11 @@ module Swallow
   end
 
   class PropVar
-    attr_reader :value, :period, :room, :instructor, :lecture
+    attr_reader :value, :timeslot, :room, :instructor, :lecture
 
-    def initialize(period, room, instructor, lecture)
+    def initialize(timeslot, room, instructor, lecture)
       @value = Ravensat::VarNode.new
-      @period = period
+      @timeslot = timeslot
       @room = room
       @instructor = instructor
       @lecture = lecture

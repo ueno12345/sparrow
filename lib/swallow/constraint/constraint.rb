@@ -53,9 +53,22 @@ class DifferentRoom < Constraint
 end
 
 class Overlap < Constraint
+  def exec(ptable)
+    # ptable.group_by(&:period).values.map do |e|
+    #   e.select { |i| @lectures.include? i.lecture.name }.map(&:value)
+    # end.reduce(:&)
+  end
 end
+# cnf &= ptable.group_by{|i| i.lecture.name}.values.map do |e|
+#   Ravensat::Claw.alo e.map(&:value)
+# end.reduce(:&)
 
 class NotOverlap < Constraint
+  def exec(ptable)
+    ptable.group_by { |i| i.timeslot.name }.values.map do |e|
+      Ravensat::Claw.commander_amo e.select { |i| @lectures.include? i.lecture.name }.map(&:value)
+    end.reduce(:&)
+  end
 end
 
 class SameAttendees < Constraint

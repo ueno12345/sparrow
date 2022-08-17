@@ -1,41 +1,56 @@
-class PeriodInitializer < Resource
-  attr_reader :periods
+class TimeslotInitializer < Resource
+  attr_reader :timeslots
 
-  WTABLE = ["Mon", "Tue", "Wed", "Thu", "Fri"].freeze
+  # WTABLE = ["Mon", "Tue", "Wed", "Thu", "Fri"].freeze
 
   def initialize(name = nil)
     super
-    @periods = []
+    @timeslots = []
   end
 
   def block_name
-    "initialize"
+    "timeslot"
   end
 
-  def nr_days_a_week(num)
-    @domain.add(num, __method__)
-    period_initialize
+  def wday(*wdays)
+    @wdays = wdays
+    @domain.add(@wdays, __method__)
+    timeslot_initialize
   end
 
-  def nr_periods(num)
-    @domain.add(num, __method__)
-    period_initialize
+  def period(*periods)
+    @periods = periods
+    @domain.add(@periods, __method__)
+    timeslot_initialize
   end
+
+  def unavailable(*timeslots)
+    @domain.add(timeslots, __method__)
+  end
+  # def nr_days_a_week(num)
+  #   @domain.add(num, __method__)
+  #   period_initialize
+  # end
+
+  # def nr_periods(num)
+  #   @domain.add(num, __method__)
+  #   period_initialize
+  # end
 
   private
 
-  def period_initialize
-    return unless @domain.include?(DomainNrDays) && @domain.include?(DomainNrPeriods)
+  def timeslot_initialize
+    return unless @wdays && @periods
 
-    @domain.constraints.first.nr_days_a_week.to_i.times do |day|
-      @domain.constraints.last.nr_periods.to_i.times do |period|
-        @periods << Period.new("#{WTABLE[day]}#{period + 1}")
+    @wdays.each do |day|
+      @periods.each do |period|
+        @timeslots << Timeslot.new("#{day}#{period}")
       end
     end
   end
 end
 
-class Period < Resource
+class Timeslot < Resource
   def initialize(name = nil)
     super
   end
