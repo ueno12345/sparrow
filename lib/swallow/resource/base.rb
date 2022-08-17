@@ -2,7 +2,7 @@ require_relative "../constraint/domain"
 
 class Resource
   attr_reader :name
-  attr_writer :domain
+  attr_accessor :domain
 
   def initialize(name = nil)
     @name = name
@@ -24,7 +24,7 @@ class Resource
     AUK
   end
 
-  def prun(ptable)
+  def domain_eval(ptable)
     @domain.prun(ptable, self)
   end
 

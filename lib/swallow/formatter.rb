@@ -23,7 +23,7 @@ module Swallow
     def format(ast, ptable)
       # Domain constraint
       ast.nodes.each do |node|
-        node.prun(ptable)
+        node.domain_eval(ptable)
       end
 
       cnf = Ravensat::InitialNode.new

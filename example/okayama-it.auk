@@ -96,6 +96,8 @@ lecture "データ構造とアルゴリズム" do
   rooms "11講義室", "14講義室"
   instructors "後藤佑介", "山内利宏"
   timeslots "Mon1", "Mon2", "Mon3", "Mon4"
+  frequency 2
+  consecutive 3
 end
 
 lecture "グラフ理論" do

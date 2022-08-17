@@ -20,7 +20,7 @@ class Constraint
 
   def domain_period; end
 
-  def prun(ptable); end
+  def domain_eval(ptable); end
 
   alias name class
 end

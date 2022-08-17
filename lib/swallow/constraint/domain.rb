@@ -39,13 +39,41 @@ class Domain < DomainComponent
       constraint = DomainTimeslots.new(domain)
     when :term
       constraint = DomainTerm.new(domain)
+    when :frequency
+      constraint = DomainFrequency.new(domain)
+    when :consecutive
+      constraint = DomainConsecutive.new(domain)
     end
 
     @constraints << constraint
   end
 
-  def remove(domain)
-    @constraints.delete(domain)
+  def remove(method_name)
+    case method_name
+    when :wday
+      @constraints.delete_if{|constraint| constraint.is_a? DomainWday}
+    when :period
+      @constraints.delete_if{|constraint| constraint.is_a? DomainPeriod}
+    when :unavailable
+      @constraints.delete_if{|constraint| constraint.is_a? DomainUnavailable}
+    when :rooms
+      @constraints.delete_if{|constraint| constraint.is_a? DomainRooms}
+    when :instructors
+      @constraints.delete_if{|constraint| constraint.is_a? DomainInstructors}
+    when :timeslots
+      @constraints.delete_if{|constraint| constraint.is_a? DomainTimeslots}
+    when :term
+      @constraints.delete_if{|constraint| constraint.is_a? DomainTerm}
+    when :frequency
+      @constraints.delete_if{|constraint| constraint.is_a? DomainFrequency}
+    when :consecutive
+      @constraints.delete_if{|constraint| constraint.is_a? DomainConsecutive}
+    end
+  end
+
+  def update(domain, method_name)
+    remove(method_name)
+    add(domain, method_name)
   end
 
   def to_auk
@@ -192,5 +220,29 @@ class DomainInstructors < DomainComponent
 
   def prun(ptable, parent)
     ptable.reject!{|i| (parent.name == i.lecture.name) && !@instructors.include?(i.instructor.name)}
+  end
+end
+
+class DomainFrequency < DomainComponent
+  def initialize(frequency)
+    @frequency = frequency
+  end
+
+  def to_auk
+    <<~AUK
+      frequency #{@frequency}
+    AUK
+  end
+end
+
+class DomainConsecutive < DomainComponent
+  def initialize(consecutive)
+    @consecutive = consecutive
+  end
+
+  def to_auk
+    <<~AUK
+      consecutive #{@consecutive}
+    AUK
   end
 end

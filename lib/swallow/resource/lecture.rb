@@ -11,7 +11,7 @@ class Lecture < Resource
     @domain.add(timeslots, __method__)
   end
 
-  def frequenct(num)
+  def frequency(num)
     @domain.add(num, __method__)
   end
 
