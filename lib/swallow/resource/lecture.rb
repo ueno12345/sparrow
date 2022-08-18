@@ -27,7 +27,7 @@ class Lecture < Resource
     @belongs_to = name
   end
 
-  def domain_period
-    @domain.constraints.select { |i| i.is_a?(DomainPeriod) }.first # NOTE: DomainPeriodにマッチする要素はただ一つになる前提
+  def domain_timeslot
+    @domain.constraints.select { |i| i.is_a?(DomainTimeslots) }.first # NOTE: DomainPeriodにマッチする要素はただ一つになる前提
   end
 end
