@@ -189,6 +189,19 @@ class DomainUnavailable < DomainComponent
       unavailable #{@unavailable_timeslots.map { |i| %("#{i}") }.join(",")}
     AUK
   end
+
+  def prun(ptable, parent)
+    # require 'pry'
+    # binding.pry
+    case parent
+    when Room
+      ptable.reject!{|i| (parent.name == i.room.name) && @unavailable_timeslots.include?(i.timeslot.name)}
+    when Instructor
+      ptable.reject!{|i| (parent.name == i.instructor.name) && @unavailable_timeslots.include?(i.timeslot.name)}
+    when TimeslotInitializer
+      ptable.reject!{|i| @unavailable_timeslots.include?(i.timeslot.name)}
+    end
+  end
 end
 
 class DomainRooms < DomainComponent
