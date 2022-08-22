@@ -29,18 +29,17 @@ module Swallow
 
   # Solving
   solver = Ravensat::Solver.new(option[:solver])
-  solver.solve formula, solver_log: option[:debug]
-
-  ptable.select { |i| i.value.value }.each do |e|
-    # domain = Domain.new
-    # domain.add([e.room.name], :rooms)
-    # domain.add([e.instructor.name], :instructors)
-    # domain.add([e.timeslot.name], :timeslots)
-
-    # e.lecture.domain = domain
-    e.lecture.domain.update([e.room.name], :rooms)
-    e.lecture.domain.update([e.instructor.name], :instructors)
-    e.lecture.domain.update([e.timeslot.name], :timeslots)
+  if solver.solve formula, solver_log: option[:debug]
+    # SAT Decoding
+    # TODO: Make Decode Class
+    ptable.select { |i| i.value.value }.each do |e|
+      e.lecture.domain.update([e.room.name], :rooms)
+      e.lecture.domain.update([e.instructor.name], :instructors)
+      e.lecture.domain.update([e.timeslot.name], :timeslots)
+    end
+  else
+    puts "UNSAT"
+    exit
   end
 
   # AUK Generator
