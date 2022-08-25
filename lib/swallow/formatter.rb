@@ -62,7 +62,7 @@ module Swallow
 
       # Conflict Constraints
       ast.nodes.each do |node|
-        node.exec(ptable) if node.is_a? Constraint
+        cnf &= node.exec(ptable) if node.is_a? Constraint
       end
 
       cnf
