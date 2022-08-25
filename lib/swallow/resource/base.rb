@@ -24,8 +24,12 @@ class Resource
     AUK
   end
 
-  def domain_eval(ptable)
+  def prun(ptable)
     @domain.prun(ptable, self)
+  end
+
+  def domain_exec(ptable)
+    @domain.exec(ptable, self)
   end
 
   def to_cnf(ptable); end

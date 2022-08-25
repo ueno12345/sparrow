@@ -4,6 +4,10 @@ class DomainComponent
   def to_auk; end
 
   def prun(ptable, parent); end
+  def exec(ptable, parent); end
+end
+
+class DomainExecutor < DomainComponent
 end
 
 class Domain < DomainComponent
@@ -88,6 +92,14 @@ class Domain < DomainComponent
     @constraints.each do |constraint|
       constraint.prun(ptable, parent)
     end
+  end
+
+  def exec(ptable, parent)
+    cnf = Ravensat::InitialNode.new
+    @constraints.select{|d| d.is_a? DomainExecutor}.each do |constraint|
+      cnf &= constraint.exec(ptable, parent)
+    end
+    cnf
   end
 end
 
@@ -236,7 +248,7 @@ class DomainInstructors < DomainComponent
   end
 end
 
-class DomainFrequency < DomainComponent
+class DomainFrequency < DomainExecutor
   def initialize(frequency)
     @frequency = frequency
   end
@@ -246,9 +258,17 @@ class DomainFrequency < DomainComponent
       frequency #{@frequency}
     AUK
   end
+
+  def exec(ptable, parent)
+    cnf = Ravensat::InitialNode.new
+
+    cnf &= Ravensat::Claw.at_least_k(ptable.select{|i| i.lecture.name == parent.name}.map(&:value), @frequency)
+    cnf &= Ravensat::Claw.at_most_k(ptable.select{|i| i.lecture.name == parent.name}.map(&:value), @frequency)
+    cnf
+  end
 end
 
-class DomainConsecutive < DomainComponent
+class DomainConsecutive < DomainExecutor
   def initialize(consecutive)
     @consecutive = consecutive
   end

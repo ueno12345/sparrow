@@ -20,7 +20,11 @@ class Constraint
 
   def domain_period; end
 
-  def domain_eval(ptable); end
+  def domain_exec(_ptable)
+    Ravensat::InitialNode.new
+  end
+
+  def prun(ptable); end
 
   alias name class
 end

@@ -21,18 +21,28 @@ module Swallow
 
   class CNFFormatter < Formatter
     def format(ast, ptable)
-      # Domain constraint
-      ast.nodes.each do |node|
-        node.domain_eval(ptable)
-      end
-
       cnf = Ravensat::InitialNode.new
 
+      # Domain constraint
+      ast.nodes.each do |node|
+        node.prun(ptable)
+      end
+
+      # Domain execution
+      ast.nodes.each do |node|
+        tmp = node.domain_exec(ptable)
+        cnf &= tmp unless tmp.is_a? Ravensat::InitialNode
+      end
+
       # Exactly One lecture
-      cnf &= ptable.group_by{|i| i.lecture.name}.values.map do |e|
+      cnf &= ptable.group_by do |i|
+               i.lecture.name
+             end.values.reject{|i| i.first.lecture.domain.include? DomainFrequency}.map do |e|
         Ravensat::Claw.alo e.map(&:value)
       end.reduce(:&)
-      cnf &= ptable.group_by{|i| i.lecture.name}.values.map do |e|
+      cnf &= ptable.group_by do |i|
+               i.lecture.name
+             end.values.reject{|i| i.first.lecture.domain.include? DomainFrequency}.map do |e|
         Ravensat::Claw.commander_amo e.map(&:value)
       end.reduce(:&)
 

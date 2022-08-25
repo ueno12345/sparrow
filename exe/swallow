@@ -32,10 +32,19 @@ module Swallow
   if solver.solve formula, solver_log: option[:debug]
     # SAT Decoding
     # TODO: Make Decode Class
-    ptable.select { |i| i.value.value }.each do |e|
-      e.lecture.domain.update([e.room.name], :rooms)
-      e.lecture.domain.update([e.instructor.name], :instructors)
-      e.lecture.domain.update([e.timeslot.name], :timeslots)
+    ptable.group_by { |i| i.lecture.name }.each_value do |lec_ptable|
+      rooms = []
+      instructors = []
+      timeslots = []
+      lecture = lec_ptable.first.lecture
+      lec_ptable.select { |i| i.value.value }.each do |e|
+        rooms.append e.room.name
+        instructors.append e.instructor.name
+        timeslots.append e.timeslot.name
+      end
+      lecture.domain.update(rooms.uniq, :rooms)
+      lecture.domain.update(instructors.uniq, :instructors)
+      lecture.domain.update(timeslots.uniq, :timeslots)
     end
   else
     puts "UNSAT"
