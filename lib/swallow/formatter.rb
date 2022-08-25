@@ -35,16 +35,16 @@ module Swallow
       end
 
       # Exactly One lecture
-      cnf &= ptable.group_by do |i|
-               i.lecture.name
-             end.values.reject{|i| i.first.lecture.domain.include? DomainFrequency}.map do |e|
-        Ravensat::Claw.alo e.map(&:value)
-      end.reduce(:&)
-      cnf &= ptable.group_by do |i|
-               i.lecture.name
-             end.values.reject{|i| i.first.lecture.domain.include? DomainFrequency}.map do |e|
-        Ravensat::Claw.commander_amo e.map(&:value)
-      end.reduce(:&)
+      pvars = ptable.group_by{|i| i.lecture.name}.values.reject{|i| i.first.lecture.domain.include? DomainFrequency}
+
+      unless pvars.empty?
+        cnf &= pvars.map do |e|
+          Ravensat::Claw.alo e.map(&:value)
+        end.reduce(:&)
+        cnf &= pvars.map do |e|
+          Ravensat::Claw.commander_amo e.map(&:value)
+        end.reduce(:&)
+      end
 
       # Conflict between teachers
       cnf &= ptable.group_by{|i| i.instructor.name}.values.map do |e|
