@@ -35,4 +35,8 @@ class Resource
   def to_cnf(ptable); end
 
   def domain_period; end
+
+  def rem(comment)
+    @domain.add(comment, __method__)
+  end
 end

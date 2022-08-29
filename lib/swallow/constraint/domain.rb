@@ -47,6 +47,8 @@ class Domain < DomainComponent
       constraint = DomainFrequency.new(domain)
     when :consecutive
       constraint = DomainConsecutive.new(domain)
+    when :rem
+      constraint = DomainRem.new(domain)
     end
 
     @constraints << constraint
@@ -276,6 +278,18 @@ class DomainConsecutive < DomainExecutor
   def to_auk
     <<~AUK
       consecutive #{@consecutive}
+    AUK
+  end
+end
+
+class DomainRem < DomainComponent
+  def initialize(comment)
+    @comment = comment
+  end
+
+  def to_auk
+    <<~AUK
+      rem "#{@comment}"
     AUK
   end
 end
