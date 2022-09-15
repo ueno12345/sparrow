@@ -280,6 +280,14 @@ class DomainConsecutive < DomainExecutor
       consecutive #{@consecutive}
     AUK
   end
+
+  def exec(ptable, parent)
+    cnf = Ravensat::InitialNode.new
+    ptable.select{|i| i.lecture.name == parent.name}.map(&:value).each_cons(@consecutive) do |node_pair|
+      cnf |= ~node_pair.first | node_pair.last
+    end
+    cnf
+  end
 end
 
 class DomainRem < DomainComponent
