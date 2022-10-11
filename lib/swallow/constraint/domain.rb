@@ -148,6 +148,8 @@ class DomainWday < DomainComponent
 end
 
 class DomainPeriod < DomainComponent
+  attr_reader :periods
+
   def initialize(periods)
     @periods = periods
   end

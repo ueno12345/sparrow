@@ -83,9 +83,9 @@ module Swallow
   class HTMLFormatter < Formatter
     def format(ast)
       # TODO: Nokogiriを使用する
-      nr_periods = 8
-      nr_days = 5
-      days_table = %w[Mon Tue Wed Thu Fri]
+      timeslot_constraint = ast.nodes.find{|node| node.is_a? TimeslotInitializer}.domain.constraints
+      periods = timeslot_constraint.find{|i| i.is_a? DomainPeriod}.periods
+      wdays = timeslot_constraint.find{|i| i.is_a? DomainWday}.wdays
       lec_periods = []
 
       ast.nodes.each do |node|
@@ -103,15 +103,15 @@ module Swallow
           doc.table class: "table table-bordered" do
             doc.tr do
               doc.th nil
-              nr_days.times do |dy|
-                doc.th days_table[dy]
+              wdays.each do |day|
+                doc.th day
               end
             end
-            nr_periods.times do |pr|
+            periods.each do |period|
               doc.tr do
-                doc.th pr + 1
-                nr_days.times do |dy|
-                  id = "#{days_table[dy]}#{pr + 1}"
+                doc.th period
+                wdays.each do |day|
+                  id = "#{day}#{period}"
                   td = []
                   lec_periods.each do |lec_pr|
                     td.append lec_pr.first if lec_pr.include? id
