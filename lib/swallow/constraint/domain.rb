@@ -282,10 +282,15 @@ class DomainConsecutive < DomainExecutor
   end
 
   def exec(ptable, parent)
+    c_vars = []
     cnf = Ravensat::InitialNode.new
-    ptable.select{|i| i.lecture.name == parent.name}.map(&:value).each_cons(@consecutive) do |node_pair|
-      cnf |= ~node_pair.first | node_pair.last
+    ptable.select{|i| i.lecture.name == parent.name}.map(&:value).each_cons(@consecutive) do |node_group|
+      c = Ravensat::VarNode.new
+      c_vars.append c
+      cnf &= node_group.map{|node| node | ~c}.reduce(:&)
     end
+    cnf &= Ravensat::Claw.commander_amo(c_vars)
+    cnf &= Ravensat::Claw.alo(c_vars)
     cnf
   end
 end
