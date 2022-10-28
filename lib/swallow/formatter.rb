@@ -1,3 +1,4 @@
+# coding: utf-8
 require "ravensat"
 require "nokogiri"
 require "rufo"
@@ -29,13 +30,17 @@ module Swallow
       end
 
       # Domain execution
+      ast.nodes.find{|i|i.is_a? TimeslotInitializer}.timeslots.each do |node|
+        tmp = node.domain_exec(ptable)
+        cnf &= tmp unless tmp.is_a? Ravensat::InitialNode
+      end
       ast.nodes.each do |node|
         tmp = node.domain_exec(ptable)
         cnf &= tmp unless tmp.is_a? Ravensat::InitialNode
       end
 
-      # Exactly One lecture
-      pvars = ptable.group_by{|i| i.lecture.name}.values.reject{|i| i.first.lecture.domain.include? DomainFrequency}
+      # Exactly One nurse
+      pvars = ptable.group_by{|i| i.nurse.name}.values.reject{|i| i.first.nurse.domain.include? DomainFrequency}
 
       unless pvars.empty?
         cnf &= pvars.map do |e|
@@ -45,20 +50,6 @@ module Swallow
           Ravensat::Claw.commander_at_most_one e.map(&:value)
         end.reduce(:&)
       end
-
-      # Conflict between teachers
-      cnf &= ptable.group_by{|i| i.instructor.name}.values.map do |e|
-        e.group_by{|i| i.timeslot.name}.values.map do |l|
-          Ravensat::Claw.commander_at_most_one l.map(&:value)
-        end.reduce(:&)
-      end.reduce(:&)
-
-      # Conflict between rooms
-      cnf &= ptable.group_by{|i| i.room.name}.values.map do |e|
-        e.group_by{|i| i.timeslot.name}.values.map do |l|
-          Ravensat::Claw.commander_at_most_one l.map(&:value)
-        end.reduce(:&)
-      end.reduce(:&)
 
       # Conflict Constraints
       ast.nodes.each do |node|
@@ -86,14 +77,14 @@ module Swallow
       timeslot_constraint = ast.nodes.find{|node| node.is_a? TimeslotInitializer}.domain.constraints
       periods = timeslot_constraint.find{|i| i.is_a? DomainPeriod}.periods
       wdays = timeslot_constraint.find{|i| i.is_a? DomainWday}.wdays
-      lec_periods = []
+      nrs_periods = []
 
       ast.nodes.each do |node|
-        next unless node.is_a? Lecture
+        next unless node.is_a? Nurse
 
-        lecture = node.name
+        nurse = node.name
         period = node.domain_timeslot.timeslots if node.domain_timeslot
-        lec_periods.append [lecture, period].flatten
+        nrs_periods.append [nurse, period].flatten
       end
       root = Nokogiri::HTML::DocumentFragment.parse("")
       Nokogiri::HTML::Builder.with(root) do |doc|
@@ -113,8 +104,8 @@ module Swallow
                 wdays.each do |day|
                   id = "#{day}#{period}"
                   td = []
-                  lec_periods.each do |lec_pr|
-                    td.append lec_pr.first if lec_pr.include? id
+                  nrs_periods.each do |nrs_pr|
+                    td.append nrs_pr.first if nrs_pr.include? id
                   end
                   doc.td td.join("<br>"), id: id
                 end

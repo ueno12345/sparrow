@@ -55,5 +55,17 @@ class Timeslot < Resource
     super
   end
 
+  def frequency(num)
+    @domain.add(num, __method__)
+  end
+
+  def at_least(num)
+    @domain.add(num, __method__)
+  end
+
+  def at_most(num)
+    @domain.add(num, __method__)
+  end
+
   def to_auk; end
 end
