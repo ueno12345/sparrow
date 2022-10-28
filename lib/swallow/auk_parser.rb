@@ -11,28 +11,23 @@ module Swallow
       @ast = AST.new
     end
 
-    def timeslot(&block)
+    def timeslots(&block)
       timeslot_initializer = TimeslotInitializer.new
       timeslot_initializer.instance_eval(&block)
       @ast << timeslot_initializer
     end
 
-    def room(name, &block)
-      room = Room.new name
-      room.instance_eval(&block)
-      @ast << room
+    def timeslot(name, &block)
+      timeslot_initializer = @ast.nodes.find{|i|i.is_a? TimeslotInitializer}
+      timeslot = timeslot_initializer.timeslots.find{|i|i.name == name}
+      timeslot.instance_eval(&block)
     end
 
-    def instructor(name, &block)
-      instructor = Instructor.new name
-      instructor.instance_eval(&block)
-      @ast << instructor
-    end
 
-    def lecture(name, &block)
-      lecture = Lecture.new name
-      lecture.instance_eval(&block)
-      @ast << lecture
+    def nurse(name, &block)
+      nurse = Nurse.new name
+      nurse.instance_eval(&block)
+      @ast << nurse
     end
 
     def same_start(&block)
@@ -73,18 +68,6 @@ module Swallow
 
     def different_weeks(&block)
       constraint = DifferentWeeks.new
-      constraint.instance_eval(&block)
-      @ast << constraint
-    end
-
-    def same_room(&block)
-      constraint = SameRoom.new
-      constraint.instance_eval(&block)
-      @ast << constraint
-    end
-
-    def different_room(&block)
-      constraint = DifferentRoom.new
       constraint.instance_eval(&block)
       @ast << constraint
     end

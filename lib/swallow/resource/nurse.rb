@@ -1,12 +1,5 @@
-class Lecture < Resource
-  def rooms(*rooms)
-    @domain.add(rooms, __method__)
-  end
-
-  def instructors(*instructors)
-    @domain.add(instructors, __method__)
-  end
-
+# coding: utf-8
+class Nurse < Resource
   def timeslots(*timeslots)
     @domain.add(timeslots, __method__)
   end
@@ -16,6 +9,14 @@ class Lecture < Resource
   end
 
   def consecutive(num)
+    @domain.add(num, __method__)
+  end
+
+  def at_least(num)
+    @domain.add(num, __method__)
+  end
+
+  def at_most(num)
     @domain.add(num, __method__)
   end
 

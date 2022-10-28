@@ -2,17 +2,17 @@ require "active_support/all"
 
 class Constraint
   def initialize
-    @lectures
+    @nurses
   end
 
-  def lectures(*lecs)
-    @lectures = lecs
+  def nurses(*nrs)
+    @nurses = nrs
   end
 
   def to_auk
     <<~AUK
       #{self.class.name.underscore} do
-        lectures #{@lectures.map { |i| %("#{i}") }.join(",")}
+        nurses #{@nurses.map { |i| %("#{i}") }.join(",")}
       end
 
     AUK
@@ -59,18 +59,18 @@ end
 class Overlap < Constraint
   def exec(ptable)
     # ptable.group_by(&:period).values.map do |e|
-    #   e.select { |i| @lectures.include? i.lecture.name }.map(&:value)
+    #   e.select { |i| @nurses.include? i.nurse.name }.map(&:value)
     # end.reduce(:&)
   end
 end
-# cnf &= ptable.group_by{|i| i.lecture.name}.values.map do |e|
+# cnf &= ptable.group_by{|i| i.nurse.name}.values.map do |e|
 #   Ravensat::Claw.alo e.map(&:value)
 # end.reduce(:&)
 
 class NotOverlap < Constraint
   def exec(ptable)
     ptable.group_by { |i| i.timeslot.name }.values.map do |e|
-      Ravensat::Claw.commander_at_most_one e.select { |i| @lectures.include? i.lecture.name }.map(&:value)
+      Ravensat::Claw.commander_amo e.select { |i| @nurses.include? i.nurse.name }.map(&:value)
     end.reduce(:&)
   end
 end

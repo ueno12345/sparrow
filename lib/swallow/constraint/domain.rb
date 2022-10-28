@@ -35,10 +35,6 @@ class Domain < DomainComponent
       constraint = DomainPeriod.new(domain)
     when :unavailable
       constraint = DomainUnavailable.new(domain)
-    when :rooms
-      constraint = DomainRooms.new(domain)
-    when :instructors
-      constraint = DomainInstructors.new(domain)
     when :timeslots
       constraint = DomainTimeslots.new(domain)
     when :term
@@ -49,6 +45,10 @@ class Domain < DomainComponent
       constraint = DomainConsecutive.new(domain)
     when :rem
       constraint = DomainRem.new(domain)
+    when :at_least
+      constraint = DomainAtLeast.new(domain)
+    when :at_most
+      constraint = DomainAtMost.new(domain)
     end
 
     @constraints << constraint
@@ -62,10 +62,6 @@ class Domain < DomainComponent
       @constraints.delete_if{|constraint| constraint.is_a? DomainPeriod}
     when :unavailable
       @constraints.delete_if{|constraint| constraint.is_a? DomainUnavailable}
-    when :rooms
-      @constraints.delete_if{|constraint| constraint.is_a? DomainRooms}
-    when :instructors
-      @constraints.delete_if{|constraint| constraint.is_a? DomainInstructors}
     when :timeslots
       @constraints.delete_if{|constraint| constraint.is_a? DomainTimeslots}
     when :term
@@ -74,6 +70,10 @@ class Domain < DomainComponent
       @constraints.delete_if{|constraint| constraint.is_a? DomainFrequency}
     when :consecutive
       @constraints.delete_if{|constraint| constraint.is_a? DomainConsecutive}
+    when :at_least
+      @constraints.delete_if{|constraint| constraint.is_a? DomainAtLeast}
+    when :at_most
+      @constraints.delete_if{|constraint| constraint.is_a? DomainAtMost}
     end
   end
 
@@ -175,7 +175,7 @@ class DomainTimeslots < DomainComponent
   end
 
   def prun(ptable, parent)
-    ptable.reject!{|i| (parent.name == i.lecture.name) && !@timeslots.include?(i.timeslot.name)}
+    ptable.reject!{|i| (parent.name == i.nurse.name) && !@timeslots.include?(i.timeslot.name)}
   end
 end
 
@@ -210,45 +210,9 @@ class DomainUnavailable < DomainComponent
     # require 'pry'
     # binding.pry
     case parent
-    when Room
-      ptable.reject!{|i| (parent.name == i.room.name) && @unavailable_timeslots.include?(i.timeslot.name)}
-    when Instructor
-      ptable.reject!{|i| (parent.name == i.instructor.name) && @unavailable_timeslots.include?(i.timeslot.name)}
     when TimeslotInitializer
       ptable.reject!{|i| @unavailable_timeslots.include?(i.timeslot.name)}
     end
-  end
-end
-
-class DomainRooms < DomainComponent
-  def initialize(rooms)
-    @rooms = rooms
-  end
-
-  def to_auk
-    <<~AUK
-      rooms #{@rooms.map { |i| %("#{i}") }.join(",")}
-    AUK
-  end
-
-  def prun(ptable, parent)
-    ptable.reject!{|i| (parent.name == i.lecture.name) && !@rooms.include?(i.room.name)}
-  end
-end
-
-class DomainInstructors < DomainComponent
-  def initialize(instructors)
-    @instructors = instructors
-  end
-
-  def to_auk
-    <<~AUK
-      instructors #{@instructors.map { |i| %("#{i}") }.join(",")}
-    AUK
-  end
-
-  def prun(ptable, parent)
-    ptable.reject!{|i| (parent.name == i.lecture.name) && !@instructors.include?(i.instructor.name)}
   end
 end
 
@@ -265,9 +229,8 @@ class DomainFrequency < DomainExecutor
 
   def exec(ptable, parent)
     cnf = Ravensat::InitialNode.new
-
-    cnf &= Ravensat::Claw.at_least_k(ptable.select{|i| i.lecture.name == parent.name}.map(&:value), @frequency)
-    cnf &= Ravensat::Claw.commander_at_most_k(ptable.select{|i| i.lecture.name == parent.name}.map(&:value), @frequency)
+    cnf &= Ravensat::Claw.at_least_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @frequency)
+    cnf &= Ravensat::Claw.at_most_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @frequency)
     cnf
   end
 end
@@ -286,7 +249,7 @@ class DomainConsecutive < DomainExecutor
   def exec(ptable, parent)
     c_vars = []
     cnf = Ravensat::InitialNode.new
-    ptable.select{|i| i.lecture.name == parent.name}.map(&:value).each_cons(@consecutive) do |node_group|
+    ptable.select{|i| i.nurse.name == parent.name}.map(&:value).each_cons(@consecutive) do |node_group|
       c = Ravensat::VarNode.new
       c_vars.append c
       cnf &= node_group.map{|node| node | ~c}.reduce(:&)
@@ -305,5 +268,41 @@ class DomainRem < DomainComponent
     <<~AUK
       rem "#{@comment}"
     AUK
+  end
+end
+
+class DomainAtLeast < DomainExecutor
+  def initialize(at_least)
+    @at_least = at_least
+  end
+
+  def to_auk
+    <<~AUK
+      at_least #{@at_least}
+    AUK
+  end
+
+  def exec(ptable, parent)
+    cnf = Ravensat::InitialNode.new
+    cnf &= Ravensat::Claw.at_least_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @at_least)
+    cnf
+  end
+end
+
+class DomainAtMost < DomainExecutor
+  def initialize(at_most)
+    @at_most = at_most
+  end
+
+  def to_auk
+    <<~AUK
+      at_most #{@at_most}
+    AUK
+  end
+
+  def exec(ptable, parent)
+    cnf = Ravensat::InitialNode.new
+    cnf &= Ravensat::Claw.at_most_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @at_most)
+    cnf
   end
 end
