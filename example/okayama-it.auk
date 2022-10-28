@@ -1,15 +1,16 @@
 timeslot do
   wday "Mon", "Tue", "Wed", "Thu", "Fri"
   period "1", "2", "3", "4", "5", "6", "7", "8"
+#  unavailable "Wed1", "Wed2", "Wed3", "Wed4", "Wed5", "Wed6", "Wed7", "Wed8"
 end
 
 room "10講義室" do
   belongs_to "講義室"
-  unavailable "Mon5", "Mon6"
+  unavailable "Mon1", "Mon2"
 end
 
 room "11講義室" do
-  unavailable "Wed1", "Wed2"
+# unavailable "Wed1", "Wed2"
   belongs_to "講義室"
 end
 
@@ -31,7 +32,7 @@ instructor "山内利宏" do
 end
 
 instructor "後藤佑介" do
-  unavailable "Fri7", "Fri8"
+# unavailable "Fri7", "Fri8"
   belongs_to "CS"
 end
 
@@ -45,7 +46,7 @@ instructor "太田学" do
 end
 
 instructor "乃村能成" do
-  unavailable "Wed7", "Wed8"
+  unavailable "Mon1", "Mon2", "Mon3", "Mon4", "Mon5", "Mon6", "Mon7", "Mon8", "Wed1", "Wed2", "Wed3", "Wed4", "Wed5", "Wed6", "Wed7", "Wed8", "Fri1", "Fri2", "Fri3", "Fri4", "Fri5", "Fri6", "Fri7", "Fri8"
   belongs_to "CS"
 end
 
@@ -93,11 +94,10 @@ lecture "プログラミング言語論" do
 end
 
 lecture "データ構造とアルゴリズム" do
-  rooms "11講義室", "14講義室"
-  instructors "後藤佑介", "山内利宏"
-  timeslots "Mon1", "Mon2", "Mon3", "Mon4"
-  frequency 2
-  consecutive 3
+  rooms "11講義室"
+  instructors "後藤佑介"
+# timeslots "Mon1", "Mon2", "Mon3", "Mon4"
+# consecutive 3
 end
 
 lecture "グラフ理論" do
@@ -108,7 +108,7 @@ end
 lecture "プログラミング演習1" do
   rooms "プログラミング演習室"
   instructors "後藤佑介", "山内利宏"
-  timeslots "Wed1", "Wed2", "Wed3", "Wed4"
+# timeslots "Wed1", "Wed2", "Wed3", "Wed4"
 end
 
 lecture "プログラミング演習2" do
@@ -184,6 +184,7 @@ end
 lecture "情報工学実験A" do
   rooms "プログラミング演習室"
   instructors "相田敏明", "太田学"
+  frequency 2
 end
 
 lecture "ソフトウェア設計" do
@@ -296,13 +297,13 @@ lecture "3次元画像処理" do
   instructors "諸岡健一"
 end
 
-overlap do
-  lectures "情報理論", "応用解析"
-end
+# overlap do
+#   lectures "情報理論", "応用解析"
+# end
 
-overlap do
-  lectures "プログラミング言語論", "コンピュータハードウェア"
-end
+# overlap do
+#   lectures "プログラミング言語論", "コンピュータハードウェア"
+# end
 
 not_overlap do
   lectures "コンピュータ科学基礎1", "コンピュータ科学基礎2"
