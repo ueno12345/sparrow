@@ -31,4 +31,8 @@ class Nurse < Resource
   def domain_timeslot
     @domain.constraints.select { |i| i.is_a?(DomainTimeslots) }.first # NOTE: DomainPeriodにマッチする要素はただ一つになる前提
   end
+
+  def unavailable(*timeslots)
+    @domain.add(timeslots, __method__)
+  end
 end
