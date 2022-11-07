@@ -39,24 +39,24 @@ module Swallow
 
       unless pvars.empty?
         cnf &= pvars.map do |e|
-          Ravensat::Claw.alo e.map(&:value)
+          Ravensat::Claw.at_least_one e.map(&:value)
         end.reduce(:&)
         cnf &= pvars.map do |e|
-          Ravensat::Claw.commander_amo e.map(&:value)
+          Ravensat::Claw.commander_at_most_one e.map(&:value)
         end.reduce(:&)
       end
 
       # Conflict between teachers
       cnf &= ptable.group_by{|i| i.instructor.name}.values.map do |e|
         e.group_by{|i| i.timeslot.name}.values.map do |l|
-          Ravensat::Claw.commander_amo l.map(&:value)
+          Ravensat::Claw.commander_at_most_one l.map(&:value)
         end.reduce(:&)
       end.reduce(:&)
 
       # Conflict between rooms
       cnf &= ptable.group_by{|i| i.room.name}.values.map do |e|
         e.group_by{|i| i.timeslot.name}.values.map do |l|
-          Ravensat::Claw.commander_amo l.map(&:value)
+          Ravensat::Claw.commander_at_most_one l.map(&:value)
         end.reduce(:&)
       end.reduce(:&)
 

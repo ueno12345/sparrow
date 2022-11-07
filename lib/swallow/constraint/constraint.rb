@@ -70,7 +70,7 @@ end
 class NotOverlap < Constraint
   def exec(ptable)
     ptable.group_by { |i| i.timeslot.name }.values.map do |e|
-      Ravensat::Claw.commander_amo e.select { |i| @lectures.include? i.lecture.name }.map(&:value)
+      Ravensat::Claw.commander_at_most_one e.select { |i| @lectures.include? i.lecture.name }.map(&:value)
     end.reduce(:&)
   end
 end

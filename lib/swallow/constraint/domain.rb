@@ -267,7 +267,7 @@ class DomainFrequency < DomainExecutor
     cnf = Ravensat::InitialNode.new
 
     cnf &= Ravensat::Claw.at_least_k(ptable.select{|i| i.lecture.name == parent.name}.map(&:value), @frequency)
-    cnf &= Ravensat::Claw.at_most_k(ptable.select{|i| i.lecture.name == parent.name}.map(&:value), @frequency)
+    cnf &= Ravensat::Claw.commander_at_most_k(ptable.select{|i| i.lecture.name == parent.name}.map(&:value), @frequency)
     cnf
   end
 end
@@ -291,8 +291,7 @@ class DomainConsecutive < DomainExecutor
       c_vars.append c
       cnf &= node_group.map{|node| node | ~c}.reduce(:&)
     end
-    cnf &= Ravensat::Claw.commander_amo(c_vars)
-    cnf &= Ravensat::Claw.alo(c_vars)
+    cnf &= Ravensat::Claw.exactly_one(c_vars)
     cnf
   end
 end
