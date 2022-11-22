@@ -116,14 +116,14 @@ module Swallow
                   lec_periods.each do |lec_pr|
                     td.append lec_pr.first if lec_pr.include? id
                   end
-                  doc.td td, id: id
+                  doc.td td.join("<br>"), id: id
                 end
               end
             end
           end
         end
       end
-      root.to_html
+      CGI.unescapeHTML root.to_html
     end
   end
 end
