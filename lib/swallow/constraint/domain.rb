@@ -29,26 +29,26 @@ class Domain < DomainComponent
     #   constraint = DomainNrDays.new(domain.first)
     # when :nr_periods
     #   constraint = DomainNrPeriods.new(domain.first)
-    when :wday
-      constraint = DomainWday.new(domain)
+    when :days
+      constraint = DomainDays.new(domain)
     when :period
       constraint = DomainPeriod.new(domain)
-    when :unavailable
-      constraint = DomainUnavailable.new(domain)
+#    when :unavailable
+#      constraint = DomainUnavailable.new(domain)
     when :timeslots
       constraint = DomainTimeslots.new(domain)
-    when :term
-      constraint = DomainTerm.new(domain)
-    when :frequency
-      constraint = DomainFrequency.new(domain)
-    when :consecutive
-      constraint = DomainConsecutive.new(domain)
+#    when :term
+#      constraint = DomainTerm.new(domain)
+#    when :frequency
+#      constraint = DomainFrequency.new(domain)
+#    when :consecutive
+#      constraint = DomainConsecutive.new(domain)
     when :rem
       constraint = DomainRem.new(domain)
-    when :at_least
-      constraint = DomainAtLeast.new(domain)
-    when :at_most
-      constraint = DomainAtMost.new(domain)
+#    when :at_least
+#      constraint = DomainAtLeast.new(domain)
+#    when :at_most
+#      constraint = DomainAtMost.new(domain)
     end
 
     @constraints << constraint
@@ -56,24 +56,24 @@ class Domain < DomainComponent
 
   def remove(method_name)
     case method_name
-    when :wday
-      @constraints.delete_if{|constraint| constraint.is_a? DomainWday}
+    when :days
+      @constraints.delete_if{|constraint| constraint.is_a? DomainDays}
     when :period
       @constraints.delete_if{|constraint| constraint.is_a? DomainPeriod}
-    when :unavailable
-      @constraints.delete_if{|constraint| constraint.is_a? DomainUnavailable}
+#    when :unavailable
+#      @constraints.delete_if{|constraint| constraint.is_a? DomainUnavailable}
     when :timeslots
       @constraints.delete_if{|constraint| constraint.is_a? DomainTimeslots}
-    when :term
-      @constraints.delete_if{|constraint| constraint.is_a? DomainTerm}
-    when :frequency
-      @constraints.delete_if{|constraint| constraint.is_a? DomainFrequency}
-    when :consecutive
-      @constraints.delete_if{|constraint| constraint.is_a? DomainConsecutive}
-    when :at_least
-      @constraints.delete_if{|constraint| constraint.is_a? DomainAtLeast}
-    when :at_most
-      @constraints.delete_if{|constraint| constraint.is_a? DomainAtMost}
+#    when :term
+#      @constraints.delete_if{|constraint| constraint.is_a? DomainTerm}
+#    when :frequency
+#      @constraints.delete_if{|constraint| constraint.is_a? DomainFrequency}
+#    when :consecutive
+#      @constraints.delete_if{|constraint| constraint.is_a? DomainConsecutive}
+#    when :at_least
+#      @constraints.delete_if{|constraint| constraint.is_a? DomainAtLeast}
+#    when :at_most
+#      @constraints.delete_if{|constraint| constraint.is_a? DomainAtMost}
     end
   end
 
@@ -133,16 +133,16 @@ end
 #   end
 # end
 
-class DomainWday < DomainComponent
-  attr_reader :wdays
+class DomainDays < DomainComponent
+  attr_reader :pdays
 
-  def initialize(wdays)
-    @wdays = wdays
+  def initialize(pdays)
+    @pdays = pdays
   end
 
   def to_auk
     <<~AUK
-      wday #{@wdays.map { |i| %("#{i}") }.join(",")}
+      days #{@pdays.map { |i| %("#{i}") }.join(",")}
     AUK
   end
 end
@@ -179,85 +179,94 @@ class DomainTimeslots < DomainComponent
   end
 end
 
-class DomainTerm < DomainComponent
-  attr_reader :term
+#class DomainTerm < DomainComponent
+#  attr_reader :term
 
-  def initialize(term)
-    @term = term
-  end
+#  def initialize(term)
+#    @term = term
+#  end
 
-  def to_auk
-    <<~AUK
-      term #{@term}
-    AUK
-  end
-end
+#  def to_auk
+#    <<~AUK
+#      term #{@term}
+#    AUK
+#  end
+#end
 
-class DomainUnavailable < DomainComponent
-  attr_reader :unavailable_timeslots
+#class DomainUnavailable < DomainComponent
+#  attr_reader :unavailable_timeslots
 
-  def initialize(unavailable_timeslots)
-    @unavailable_timeslots = unavailable_timeslots
-  end
+#  def initialize(unavailable_timeslots)
+#    @unavailable_timeslots = unavailable_timeslots
+#  end
 
-  def to_auk
-    <<~AUK
-      unavailable #{@unavailable_timeslots.map { |i| %("#{i}") }.join(",")}
-    AUK
-  end
+#  def to_auk
+#    <<~AUK
+#      unavailable #{@unavailable_timeslots.map { |i| %("#{i}") }.join(",")}
+#    AUK
+#  end
 
-  def prun(ptable, parent)
+#  def prun(ptable, parent)
     # require 'pry'
     # binding.pry
-    case parent
-    when TimeslotInitializer
-      ptable.reject!{|i| @unavailable_timeslots.include?(i.timeslot.name)}
-    end
-  end
-end
 
-class DomainFrequency < DomainExecutor
-  def initialize(frequency)
-    @frequency = frequency
-  end
+#    case parent
+#    when TimeslotInitializer
+#      ptable.reject!{|i| @unavailable_timeslots.include?(i.timeslot.name)}
+#    end
+#  end
+#end
 
-  def to_auk
-    <<~AUK
-      frequency #{@frequency}
-    AUK
-  end
+#class DomainFrequency < DomainExecutor
+#  def initialize(frequency)
+#    @frequency = frequency
+#  end
 
-  def exec(ptable, parent)
-    cnf = Ravensat::InitialNode.new
-    cnf &= Ravensat::Claw.at_least_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @frequency)
-    cnf &= Ravensat::Claw.at_most_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @frequency)
-    cnf
-  end
-end
+#  def to_auk
+#    <<~AUK
+#      frequency #{@frequency}
+#    AUK
+#  end
 
-class DomainConsecutive < DomainExecutor
-  def initialize(consecutive)
-    @consecutive = consecutive
-  end
+#  def exec(ptable, parent)
+#    cnf = Ravensat::InitialNode.new
 
-  def to_auk
-    <<~AUK
-      consecutive #{@consecutive}
-    AUK
-  end
+#    cnf &= Ravensat::Claw.exactly_k(ptable.select{|i| i.nurse.name == parent.name}.map(&:value), @frequency)
+#    cnf
+#  end
 
-  def exec(ptable, parent)
-    c_vars = []
-    cnf = Ravensat::InitialNode.new
-    ptable.select{|i| i.nurse.name == parent.name}.map(&:value).each_cons(@consecutive) do |node_group|
-      c = Ravensat::VarNode.new
-      c_vars.append c
-      cnf &= node_group.map{|node| node | ~c}.reduce(:&)
-    end
-    cnf &= Ravensat::Claw.exactly_one(c_vars)
-    cnf
-  end
-end
+#  def exec(ptable, parent)
+#    cnf = Ravensat::InitialNode.new
+#    cnf &= Ravensat::Claw.exactly_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @frequency)
+    #cnf &= Ravensat::Claw.at_most_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @frequency)
+#    cnf
+#  end
+#end
+
+#class DomainConsecutive < DomainExecutor
+#  def initialize(consecutive)
+#    @consecutive = consecutive
+#  end
+
+#  def to_auk
+#    <<~AUK
+#      consecutive #{@consecutive}
+#    AUK
+#  end
+
+#  def exec(ptable, parent)
+#    c_vars = []
+#    cnf = Ravensat::InitialNode.new
+#    ptable.select{|i| i.nurse.name == parent.name}.map(&:value).each_cons(@consecutive) do |node_group|
+#      c = Ravensat::VarNode.new
+#      c_vars.append c
+#      cnf &= node_group.map{|node| node | ~c}.reduce(:&)
+#    end
+#    cnf &= Ravensat::Claw.commander_amo(c_vars)
+#    cnf &= Ravensat::Claw.alo(c_vars)
+#    cnf
+#  end
+#end
 
 class DomainRem < DomainComponent
   def initialize(comment)
@@ -271,38 +280,50 @@ class DomainRem < DomainComponent
   end
 end
 
-class DomainAtLeast < DomainExecutor
-  def initialize(at_least)
-    @at_least = at_least
-  end
+#class DomainAtLeast < DomainExecutor
+#  def initialize(at_least)
+#    @at_least = at_least
+#  end
 
-  def to_auk
-    <<~AUK
-      at_least #{@at_least}
-    AUK
-  end
+#  def to_auk
+#    <<~AUK
+#      at_least #{@at_least}
+#    AUK
+#  end
 
-  def exec(ptable, parent)
-    cnf = Ravensat::InitialNode.new
-    cnf &= Ravensat::Claw.at_least_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @at_least)
-    cnf
-  end
-end
+#  def exec(ptable, parent)
+#    cnf = Ravensat::InitialNode.new
+#    cnf &= Ravensat::Claw.at_least_k(ptable.select{|i| i.nurse.name == parent.name}.map(&:value), @at_least)
+#    cnf
+#  end
 
-class DomainAtMost < DomainExecutor
-  def initialize(at_most)
-    @at_most = at_most
-  end
+#  def exec(ptable, parent)
+#    cnf = Ravensat::InitialNode.new
+#    cnf &= Ravensat::Claw.at_least_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @at_least)
+#    cnf
+#  end
+#end
 
-  def to_auk
-    <<~AUK
-      at_most #{@at_most}
-    AUK
-  end
+#class DomainAtMost < DomainExecutor
+#  def initialize(at_most)
+#    @at_most = at_most
+#  end
 
-  def exec(ptable, parent)
-    cnf = Ravensat::InitialNode.new
-    cnf &= Ravensat::Claw.at_most_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @at_most)
-    cnf
-  end
-end
+#  def to_auk
+#    <<~AUK
+#      at_most #{@at_most}
+#    AUK
+#  end
+
+#  def exec(ptable, parent)
+#    cnf = Ravensat::InitialNode.new
+#    cnf &= Ravensat::Claw.commander_at_most_k(ptable.select{|i| i.nurse.name == parent.name}.map(&:value), @at_most)
+#    cnf
+#  end
+
+#  def exec(ptable, parent)
+#    cnf = Ravensat::InitialNode.new
+#    cnf &= Ravensat::Claw.commander_at_most_k(ptable.select{|i| i.nurse.name == parent.name || i.timeslot.name == parent.name}.map(&:value), @at_most)
+#    cnf
+#  end
+#end

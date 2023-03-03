@@ -21,6 +21,7 @@ module Swallow
   # AUK Parser
   parser = AUKParser.new
   parser.parse File.read(ARGV[0]) if ARGV[0]
+
   ast = parser.ast
 
   # SAT Encoder

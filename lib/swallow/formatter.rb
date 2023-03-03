@@ -30,26 +30,26 @@ module Swallow
       end
 
       # Domain execution
-      ast.nodes.find{|i|i.is_a? TimeslotInitializer}.timeslots.each do |node|
-        tmp = node.domain_exec(ptable)
-        cnf &= tmp unless tmp.is_a? Ravensat::InitialNode
-      end
+     # ast.nodes.find{|i|i.is_a? TimeslotInitializer}.timeslots.each do |node|
+     #   tmp = node.domain_exec(ptable)
+     #   cnf &= tmp unless tmp.is_a? Ravensat::InitialNode
+     # end
       ast.nodes.each do |node|
         tmp = node.domain_exec(ptable)
         cnf &= tmp unless tmp.is_a? Ravensat::InitialNode
       end
 
       # Exactly One nurse
-      pvars = ptable.group_by{|i| i.nurse.name}.values.reject{|i| i.first.nurse.domain.include? DomainFrequency}
+     # pvars = ptable.group_by{|i| i.nurse.name}.values.reject{|i| i.first.nurse.domain.include? DomainFrequency}
 
-      unless pvars.empty?
-        cnf &= pvars.map do |e|
-          Ravensat::Claw.at_least_one e.map(&:value)
-        end.reduce(:&)
-        cnf &= pvars.map do |e|
-          Ravensat::Claw.commander_at_most_one e.map(&:value)
-        end.reduce(:&)
-      end
+     # unless pvars.empty?
+     #   cnf &= pvars.map do |e|
+     #     Ravensat::Claw.alo e.map(&:value)
+     #   end.reduce(:&)
+     #   cnf &= pvars.map do |e|
+     #     Ravensat::Claw.commander_amo e.map(&:value)
+     #   end.reduce(:&)
+     # end
 
       # Conflict Constraints
       ast.nodes.each do |node|
@@ -76,7 +76,7 @@ module Swallow
       # TODO: Nokogiriを使用する
       timeslot_constraint = ast.nodes.find{|node| node.is_a? TimeslotInitializer}.domain.constraints
       periods = timeslot_constraint.find{|i| i.is_a? DomainPeriod}.periods
-      wdays = timeslot_constraint.find{|i| i.is_a? DomainWday}.wdays
+      pdays = timeslot_constraint.find{|i| i.is_a? DomainDays}.pdays
       nrs_periods = []
 
       ast.nodes.each do |node|
@@ -94,14 +94,14 @@ module Swallow
           doc.table class: "table table-bordered" do
             doc.tr do
               doc.th nil
-              wdays.each do |day|
+              pdays.each do |day|
                 doc.th day
               end
             end
             periods.each do |period|
               doc.tr do
                 doc.th period
-                wdays.each do |day|
+                pdays.each do |day|
                   id = "#{day}#{period}"
                   td = []
                   nrs_periods.each do |nrs_pr|
