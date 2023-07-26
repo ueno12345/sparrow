@@ -7,7 +7,7 @@ class Resource
   def initialize(name = nil)
     @name = name
     @domain = Domain.new
-    @belongs_to = ""
+    # @belongs_to = ""
   end
 
   def block_name

@@ -30,31 +30,34 @@ module Swallow
       end
 
       # Domain execution
-     # ast.nodes.find{|i|i.is_a? TimeslotInitializer}.timeslots.each do |node|
-     #   tmp = node.domain_exec(ptable)
-     #   cnf &= tmp unless tmp.is_a? Ravensat::InitialNode
-     # end
+    # ast.nodes.find{|i|i.is_a? TimeslotInitializer}.timeslots.each do |node|
+    #   tmp = node.domain_exec(ptable)
+    #   cnf &= tmp unless tmp.is_a? Ravensat::InitialNode
+    # end
       ast.nodes.each do |node|
         tmp = node.domain_exec(ptable)
         cnf &= tmp unless tmp.is_a? Ravensat::InitialNode
       end
 
       # Exactly One nurse
-     # pvars = ptable.group_by{|i| i.nurse.name}.values.reject{|i| i.first.nurse.domain.include? DomainFrequency}
+    # pvars = ptable.group_by{|i| i.nurse.name}.values.reject{|i| i.first.nurse.domain.include? DomainFrequency}
 
-     # unless pvars.empty?
-     #   cnf &= pvars.map do |e|
-     #     Ravensat::Claw.alo e.map(&:value)
-     #   end.reduce(:&)
-     #   cnf &= pvars.map do |e|
-     #     Ravensat::Claw.commander_amo e.map(&:value)
-     #   end.reduce(:&)
-     # end
+    # unless pvars.empty?
+    #   cnf &= pvars.map do |e|
+    #     Ravensat::Claw.alo e.map(&:value)
+    #   end.reduce(:&)
+    #   cnf &= pvars.map do |e|
+    #     Ravensat::Claw.commander_amo e.map(&:value)
+    #   end.reduce(:&)
+    # end
 
-      # Conflict Constraints
-      ast.nodes.each do |node|
-        cnf &= node.exec(ptable) if node.is_a? Constraint
-      end
+    ##################
+    #この先する必要があるところ
+    ##################
+    # Conflict Constraints
+    ast.nodes.each do |node|
+      cnf &= node.exec(ptable) if node.is_a? Constraint
+    end
 
       cnf
     end

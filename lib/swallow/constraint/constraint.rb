@@ -121,13 +121,13 @@ end
     end
 
     def exec(ptable)
-      p resources.class
 #    ptable.group_by { |i| i.timeslot.name }.values.map do |e|
 #      Ravensat::Claw.commander_at_most_k(e.select { |i| @nurses.include? i.nurse.name }.map(&:value), @num)
 #    end.reduce(:&)
 #    end
 #      Ravensat::Claw.commander_at_most_k(ptable, @num)
-      Ravensat::Claw.commander_at_most_k(@resources, @num)
+      # Ravensat::Claw.commander_at_most_k(@resources, @num)
+      Ravensat::Claw.commander_at_most_k(ptable, @num)
     end
   end
 
