@@ -112,12 +112,19 @@ end
 
     def timeslot(&block)
       timeslot = TimeslotParser.new(@timeslot_collection)
-      timeslot.instance_eval(&block)
+      ########
+      #timeslot の集合
+      ########
+      @resources << timeslot.instance_eval(&block)
     end
 
     def nurse(&block)
       nurse = NurseParser.new(@nurse_collection)
-      nurse.instance_eval(&block)
+      ########
+      #nurse の集合
+      ########
+      @resources << nurse.instance_eval(&block)
+      #binding.irb
     end
 
     def exec(ptable)
@@ -127,7 +134,29 @@ end
 #    end
 #      Ravensat::Claw.commander_at_most_k(ptable, @num)
       # Ravensat::Claw.commander_at_most_k(@resources, @num)
-      Ravensat::Claw.commander_at_most_k(ptable, @num)
+
+
+#####
+# @resourse は timeslot と nurse の二次元配列になっている
+# ptable?にする？
+#####
+
+
+      @resources.each do |t|
+        t.map do |e|
+          #####
+          # e が timeslotクラスになっている
+          # ptable?にする？
+          #####
+          Ravensat::Claw.commander_at_most_k(ptable, @num)
+        end
+      end
+
+
+
+
+      binding.irb
+      Ravensat::Claw.commander_at_most_k(@resources, @num)
     end
   end
 
@@ -139,6 +168,7 @@ end
     def any
       # p @timeslot_collection
       return @timeslot_collection
+
     end
 
 #    def day

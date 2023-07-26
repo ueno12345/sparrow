@@ -36,8 +36,8 @@ module Swallow
   #149はなった
   ##################
   ptable = PropTable.new(ast)
+  binding.irb
 
-binding.irb
   ################
   #2023/7/12
   #gems/ravensat-1.1.1/lib/ravensat/ast/initial_node.rb:4:in `&': NilClass can't be coerced into Ravensat::Node (TypeError)
