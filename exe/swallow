@@ -36,7 +36,6 @@ module Swallow
   #149はなった
   ##################
   ptable = PropTable.new(ast)
-  binding.irb
 
   ################
   #2023/7/12

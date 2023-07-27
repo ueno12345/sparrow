@@ -133,7 +133,7 @@ end
 #    end.reduce(:&)
 #    end
 #      Ravensat::Claw.commander_at_most_k(ptable, @num)
-      # Ravensat::Claw.commander_at_most_k(@resources, @num)
+#      Ravensat::Claw.commander_at_most_k(@resources, @num)
 
 
 #####
@@ -141,22 +141,16 @@ end
 # ptable?にする？
 #####
 
+#       @resources.each do |t|
+#         t.map do |e|
+#           #####
+#           # e が timeslotクラスになっている
+#           # ptable?にする？
+#           #####
+#           Ravensat::Claw.commander_at_most_k(ptable, @num)
+#         end
 
-      @resources.each do |t|
-        t.map do |e|
-          #####
-          # e が timeslotクラスになっている
-          # ptable?にする？
-          #####
-          Ravensat::Claw.commander_at_most_k(ptable, @num)
-        end
-      end
-
-
-
-
-      binding.irb
-      Ravensat::Claw.commander_at_most_k(@resources, @num)
+      Ravensat::Claw.commander_at_most_k(ptable, @num)
     end
   end
 
@@ -168,7 +162,6 @@ end
     def any
       # p @timeslot_collection
       return @timeslot_collection
-
     end
 
 #    def day
@@ -193,9 +186,9 @@ end
       return @nurse_collection
     end
 
-   # def ladder
-   #  LadderLevel.new(@nurse_collection)
-   # end
+  # def ladder
+  #  LadderLevel.new(@nurse_collection)
+  # end
 
 #    def name
 #      Name.new(@nurse_collection)
