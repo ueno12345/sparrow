@@ -150,7 +150,13 @@ end
 #           Ravensat::Claw.commander_at_most_k(ptable, @num)
 #         end
 
-      Ravensat::Claw.commander_at_most_k(ptable, @num)
+      #Ravensat::Claw.commander_at_most_k(ptable, @num)
+
+      ptable.map do |e|
+        p e
+        Ravensat::Claw.commander_at_most_k e.map(&:value)
+      end.reduce(:&)
+
     end
   end
 
