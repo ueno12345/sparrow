@@ -160,6 +160,55 @@ end
     end
   end
 
+  class AtLeast < Constraint
+    attr_accessor :resources
+    def initialize(num, ast_timeslot_collection, ast_nurse_collection)
+      @num = num
+      @resources = Collection.new
+      @timeslot_collection = ast_timeslot_collection
+      @nurse_collection = ast_nurse_collection
+    end
+
+    def timeslot(&block)
+      timeslot = TimeslotParser.new(@timeslot_collection)
+      @resources << timeslot.instance_eval(&block)
+    end
+
+    def nurse(&block)
+      nurse = NurseParser.new(@nurse_collection)
+      @resources << nurse.instance_eval(&block)
+    end
+
+    def exec(ptable)
+      Ravensat::Claw.at_least_k(ptable.map(&:value), @num)
+    end
+  end
+
+  class Exactly < Constraint
+    attr_accessor :resources
+    def initialize(num, ast_timeslot_collection, ast_nurse_collection)
+      @num = num
+      @resources = Collection.new
+      @timeslot_collection = ast_timeslot_collection
+      @nurse_collection = ast_nurse_collection
+    end
+
+    def timeslot(&block)
+      timeslot = TimeslotParser.new(@timeslot_collection)
+      @resources << timeslot.instance_eval(&block)
+    end
+
+    def nurse(&block)
+      nurse = NurseParser.new(@nurse_collection)
+      @resources << nurse.instance_eval(&block)
+      #binding.irb
+    end
+
+    def exec(ptable)
+      Ravensat::Claw.commander_exactly_k(ptable.map(&:value), @num)
+    end
+  end
+
   class TimeslotParser < TimeslotCollection
     def initialize(t_collection)
     @timeslot_collection = t_collection

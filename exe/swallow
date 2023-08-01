@@ -35,13 +35,16 @@ module Swallow
   #本来は7*3*7の149になるはず
   #149はなった
   ##################
+  p "making ptable..."
   ptable = PropTable.new(ast)
 
   ################
   #2023/7/12
   #gems/ravensat-1.1.1/lib/ravensat/ast/initial_node.rb:4:in `&': NilClass can't be coerced into Ravensat::Node (TypeError)
   ##################
+  p "making CNF..."
   formula = ast.to_cnf(ptable)
+  p "solving..."
 
   # Solving
   solver = Ravensat::Solver.new(option[:solver])

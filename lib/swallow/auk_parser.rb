@@ -51,6 +51,20 @@ module Swallow
       @ast << constraint
     end
 
+    def at_least(num, &block)
+      constraint = AtLeast.new(num, @ast_timeslot_collection, @ast_nurse_collection)
+      resources = constraint.instance_eval(&block)
+      constraint.resources = resources
+      @ast << constraint
+    end
+
+    def exactly(num, &block)
+      constraint = Exactly.new(num, @ast_timeslot_collection, @ast_nurse_collection)
+      resources = constraint.instance_eval(&block)
+      constraint.resources = resources
+      @ast << constraint
+    end
+
     alias parse instance_eval
   end
 end
