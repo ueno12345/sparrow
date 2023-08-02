@@ -19,7 +19,7 @@ module Swallow
       @ast << timeslot_initializer.timeslots
       timeslot_initializer.timeslots.each { |t|
         @ast_timeslot_collection << t
-    }
+      }
     end
 
 #    def timeslots(&block)

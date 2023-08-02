@@ -29,7 +29,7 @@ at_most 4 do
   timeslot {any} & nurse {any}
 end
 
-at_most 4 do
+exactly 1 do
   timeslot {any} & nurse {any}
 end
 

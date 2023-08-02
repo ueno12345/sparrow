@@ -205,7 +205,7 @@ end
     end
 
     def exec(ptable)
-      Ravensat::Claw.commander_exactly_k(ptable.map(&:value), @num)
+      Ravensat::Claw.exactly_k(ptable.map(&:value), @num)
     end
   end
 

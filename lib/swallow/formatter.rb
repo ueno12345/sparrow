@@ -77,7 +77,11 @@ module Swallow
   class HTMLFormatter < Formatter
     def format(ast)
       # TODO: Nokogiriを使用する
+      # timeslot_constraint = ast.nodes.find{|node| node.is_a? TimeslotInitializer}.domain.constraints
       timeslot_constraint = ast.nodes.find{|node| node.is_a? TimeslotInitializer}.domain.constraints
+      (1..10).each do |i|
+        p timeslot_constraint[i]
+      end
       periods = timeslot_constraint.find{|i| i.is_a? DomainPeriod}.periods
       pdays = timeslot_constraint.find{|i| i.is_a? DomainDays}.pdays
       nrs_periods = []
@@ -89,6 +93,7 @@ module Swallow
         period = node.domain_timeslot.timeslots if node.domain_timeslot
         nrs_periods.append [nurse, period].flatten
       end
+      binding.irb
       root = Nokogiri::HTML::DocumentFragment.parse("")
       Nokogiri::HTML::Builder.with(root) do |doc|
         doc.link rel: "stylesheet", href: "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"
