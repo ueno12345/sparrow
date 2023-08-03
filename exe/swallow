@@ -35,15 +35,17 @@ module Swallow
   #本来は7*3*7の149になるはず
   #149はなった
   ##################
-  p "making ptable..."
+#  p "making ptable..."
   ptable = PropTable.new(ast)
+#  p "Done"
   ################
   #2023/7/12
   #gems/ravensat-1.1.1/lib/ravensat/ast/initial_node.rb:4:in `&': NilClass can't be coerced into Ravensat::Node (TypeError)
   ##################
-  p "making CNF..."
+#  p "making CNF..."
   formula = ast.to_cnf(ptable)
-  p "solving..."
+#  p "Done"
+#  p "solving..."
 
   # Solving
   solver = Ravensat::Solver.new(option[:solver])
@@ -62,7 +64,7 @@ module Swallow
     puts "UNSAT"
     exit
   end
-binding.irb
+
   # # AUK Generator
   # あとから実装
   case option[:format]

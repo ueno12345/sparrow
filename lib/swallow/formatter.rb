@@ -78,22 +78,25 @@ module Swallow
     def format(ast)
       # TODO: Nokogiriを使用する
       # timeslot_constraint = ast.nodes.find{|node| node.is_a? TimeslotInitializer}.domain.constraints
-      timeslot_constraint = ast.nodes.find{|node| node.is_a? TimeslotInitializer}.domain.constraints
-      (1..10).each do |i|
-        p timeslot_constraint[i]
-      end
-      periods = timeslot_constraint.find{|i| i.is_a? DomainPeriod}.periods
-      pdays = timeslot_constraint.find{|i| i.is_a? DomainDays}.pdays
+      n_timeslots = []
+      n_nurses = []
+      c_nurses =[]
       nrs_periods = []
 
       ast.nodes.each do |node|
-        next unless node.is_a? Nurse
-
-        nurse = node.name
-        period = node.domain_timeslot.timeslots if node.domain_timeslot
-        nrs_periods.append [nurse, period].flatten
+        next unless node.is_a? Timeslot
+        n_timeslots << node.name
       end
-      binding.irb
+      ast.nodes.each do |node|
+        next unless node.is_a? Nurse
+        n_nurses << node.name
+        nurse = node.name
+        node.domain.constraints.first.timeslots.each do |timeslot|
+          c_nurses = timeslot
+          nrs_periods.append [nurse, c_nurses]
+        end
+      end
+
       root = Nokogiri::HTML::DocumentFragment.parse("")
       Nokogiri::HTML::Builder.with(root) do |doc|
         doc.link rel: "stylesheet", href: "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"
@@ -102,18 +105,17 @@ module Swallow
           doc.table class: "table table-bordered" do
             doc.tr do
               doc.th nil
-              pdays.each do |day|
-                doc.th day
+              n_timeslots.each do |timeslot|
+                doc.th timeslot
               end
             end
-            periods.each do |period|
+            n_nurses.each do |nurse|
               doc.tr do
-                doc.th period
-                pdays.each do |day|
-                  id = "#{day}#{period}"
+                doc.th nurse
+                n_timeslots.each do |timeslot|
                   td = []
                   nrs_periods.each do |nrs_pr|
-                    td.append nrs_pr.first if nrs_pr.include? id
+                    td.append nrs_pr.first if nrs_pr.include? timeslot
                   end
                   doc.td td.join("<br>"), id: id
                 end
