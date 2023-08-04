@@ -99,9 +99,9 @@ module Swallow
 
       root = Nokogiri::HTML::DocumentFragment.parse("")
       Nokogiri::HTML::Builder.with(root) do |doc|
-        doc.link rel: "stylesheet", href: "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"
+        doc.link rel: "stylesheet", href:        "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"
         doc.div.nav.index do
-          doc.h1 "Time Table"
+          doc.h1 "Work Schedule"
           doc.table class: "table table-bordered" do
             doc.tr do
               doc.th nil
@@ -114,10 +114,8 @@ module Swallow
                 doc.th nurse
                 n_timeslots.each do |timeslot|
                   td = []
-                  nrs_periods.each do |nrs_pr|
-                    td.append nrs_pr.first if nrs_pr.include? timeslot
-                  end
-                  doc.td td.join("<br>"), id: id
+                  td.append nrs_periods.include?([nurse, timeslot]) ? "&#9711;" : ""
+                  doc.td td.join("<br>"), id: "id_#{nurse}_#{timeslot}"
                 end
               end
             end
