@@ -75,12 +75,20 @@ module Swallow
   end
 
   class HTMLFormatter < Formatter
+    # def slot_content(nurse, timeslot, nrs_periods)
+    #   binding.irb
+    #   return "日" if nrs_periods.include?([nurse, timeslot + "day"])
+    #   return "準" if nrs_periods.include?([nurse, timeslot + "sem"])
+    #   return "深" if nrs_periods.include?([nurse, timeslot + "ngt"])
+    #   return "休"
+    # end
+
     def format(ast)
       # TODO: Nokogiriを使用する
       # timeslot_constraint = ast.nodes.find{|node| node.is_a? TimeslotInitializer}.domain.constraints
       n_timeslots = []
       n_nurses = []
-      c_nurses =[]
+      c_nurses = []
       nrs_periods = []
 
       ast.nodes.each do |node|
@@ -99,22 +107,30 @@ module Swallow
 
       root = Nokogiri::HTML::DocumentFragment.parse("")
       Nokogiri::HTML::Builder.with(root) do |doc|
-        doc.link rel: "stylesheet", href:        "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"
+        doc.link rel: "stylesheet", href: "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"
         doc.div.nav.index do
           doc.h1 "Work Schedule"
           doc.table class: "table table-bordered" do
             doc.tr do
               doc.th nil
-              n_timeslots.each do |timeslot|
+              n_timeslots.map { |ts| ts[/\d+/] }.uniq.sort.each do |timeslot|
                 doc.th timeslot
               end
             end
             n_nurses.each do |nurse|
               doc.tr do
                 doc.th nurse
-                n_timeslots.each do |timeslot|
+                n_timeslots.map { |ts| ts[/\d+/] }.uniq.sort.each do |timeslot|
                   td = []
-                  td.append nrs_periods.include?([nurse, timeslot]) ? "&#9711;" : ""
+                  if nrs_periods.include?([nurse, timeslot + "day"])
+                    td.append "日"
+                  elsif nrs_periods.include?([nurse, timeslot + "sem"])
+                    td.append "準"
+                  elsif nrs_periods.include?([nurse, timeslot + "ngt"])
+                    td.append "深"
+                  else
+                    td.append "休"
+                  end
                   doc.td td.join("<br>"), id: "id_#{nurse}_#{timeslot}"
                 end
               end
