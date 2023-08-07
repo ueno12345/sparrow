@@ -127,36 +127,39 @@ end
       #binding.irb
     end
 
-    def exec(ptable)
-#    ptable.group_by { |i| i.timeslot.name }.values.map do |e|
-#      Ravensat::Claw.commander_at_most_k(e.select { |i| @nurses.include? i.nurse.name }.map(&:value), @num)
-#    end.reduce(:&)
-#    end
-#      Ravensat::Claw.commander_at_most_k(ptable, @num)
-#      Ravensat::Claw.commander_at_most_k(@resources, @num)
-
-
-#####
-# @resourse は timeslot と nurse の二次元配列になっている
-# ptable?にする？
-#####
-
-#       @resources.each do |t|
-#         t.map do |e|
-#           #####
-#           # e が timeslotクラスになっている
-#           # ptable?にする？
-#           #####
-#           Ravensat::Claw.commander_at_most_k(ptable, @num)
-#         end
-
-      # Ravensat::Claw.commander_at_most_k(ptable, @num)
-
-      # ptable.map do |e|
-      #   Ravensat::Claw.commander_at_most_k e.map(&:value)
-      # end.reduce(:&)
-
-      Ravensat::Claw.commander_at_most_k(ptable.map(&:value), @num)
+#     def exec(ptable)
+# #    ptable.group_by { |i| i.timeslot.name }.values.map do |e|
+# #      Ravensat::Claw.commander_at_most_k(e.select { |i| @nurses.include? i.nurse.name }.map(&:value), @num)
+# #    end.reduce(:&)
+# #    end
+# #      Ravensat::Claw.commander_at_most_k(ptable, @num)
+# #      Ravensat::Claw.commander_at_most_k(@resources, @num)
+# 
+# 
+# #####
+# # @resourse は timeslot と nurse の二次元配列になっている
+# # ptable?にする？
+# #####
+# 
+# #       @resources.each do |t|
+# #         t.map do |e|
+# #           #####
+# #           # e が timeslotクラスになっている
+# #           # ptable?にする？
+# #           #####
+# #           Ravensat::Claw.commander_at_most_k(ptable, @num)
+# #         end
+# 
+#       # Ravensat::Claw.commander_at_most_k(ptable, @num)
+# 
+#       # ptable.map do |e|
+#       #   Ravensat::Claw.commander_at_most_k e.map(&:value)
+#       # end.reduce(:&)
+# 
+#       Ravensat::Claw.commander_at_most_k(ptable.map(&:value), @num)
+#     end
+    def exec(resources)
+      Ravensat::Claw.commander_at_most_k(resources.map(&:value), @num)
     end
   end
 
