@@ -158,8 +158,22 @@ end
 # 
 #       Ravensat::Claw.commander_at_most_k(ptable.map(&:value), @num)
 #     end
-    def exec(resources)
-      Ravensat::Claw.commander_at_most_k(resources.map(&:value), @num)
+    def exec(ptable)
+      timeslots = []
+      nurses = []
+
+      @resources.each do |resource|
+        resource.each do |res|
+          case res
+          when Timeslot
+            timeslots << res.name
+          when Nurse
+            nurses << res.name
+          end
+        end
+      end
+
+      Ravensat::Claw.commander_at_most_k(ptable.select{|i| timeslots.uniq.include? i.timeslot.name}.select{|j| nurses.uniq.include? j.nurse.name}.map(&:value), @num)
     end
   end
 
@@ -182,8 +196,22 @@ end
       @resources << nurse.instance_eval(&block)
     end
 
-    def exec(resources)
-      Ravensat::Claw.at_least_k(resources.map(&:value), @num)
+    def exec(ptable)
+      timeslots = []
+      nurses = []
+
+      @resources.each do |resource|
+        resource.each do |res|
+          case res
+          when Timeslot
+            timeslots << res.name
+          when Nurse
+            nurses << res.name
+          end
+        end
+      end
+
+      Ravensat::Claw.at_least_k(ptable.select{|i| timeslots.uniq.include? i.timeslot.name}.select{|j| nurses.uniq.include? j.nurse.name}.map(&:value), @num)
     end
   end
 
@@ -207,7 +235,27 @@ end
     end
 
     def exec(ptable)
-      Ravensat::Claw.exactly_k(ptable.map(&:value), @num)
+      # ptable.group_by { |i| i.timeslot.name }.values.map do |e|
+      #   Ravensat::Claw.commander_at_most_one e.select { |i| @lectures.include? i.lecture.name }.map(&:value)
+      # end.reduce(:&)
+      
+      timeslots = []
+      nurses = []
+
+      @resources.each do |resource|
+        resource.each do |res|
+          case res
+          when Timeslot
+            timeslots << res.name
+          when Nurse
+            nurses << res.name
+          end
+        end
+      end
+
+      Ravensat::Claw.exactly_k(ptable.select{|i| timeslots.uniq.include? i.timeslot.name}.select{|j| nurses.uniq.include? j.nurse.name}.map(&:value), @num)
+      
+      #Ravensat::Claw.exactly_k(ptable.map(&:value), @num)
     end
   end
 
