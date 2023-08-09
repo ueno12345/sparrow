@@ -8,10 +8,9 @@ class Collection < Array
     def &(target)
       # 後で考え直す
       # self と target がぐちゃぐちゃ（同じになっている）
-      #binding.irb
       a = self.first.product target.last
       #b = a.to_collection
-    #return b
+    return a
     end
 
 #    def *(target)

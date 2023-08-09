@@ -182,8 +182,8 @@ end
       @resources << nurse.instance_eval(&block)
     end
 
-    def exec(ptable)
-      Ravensat::Claw.at_least_k(ptable.map(&:value), @num)
+    def exec(resources)
+      Ravensat::Claw.at_least_k(resources.map(&:value), @num)
     end
   end
 
@@ -204,7 +204,6 @@ end
     def nurse(&block)
       nurse = NurseParser.new(@nurse_collection)
       @resources << nurse.instance_eval(&block)
-      #binding.irb
     end
 
     def exec(ptable)
@@ -214,30 +213,48 @@ end
 
   class TimeslotParser < TimeslotCollection
     def initialize(t_collection)
-    @timeslot_collection = t_collection
+      @timeslot_collection = t_collection
     end
 
     def any
-      # p @timeslot_collection
       return @timeslot_collection
     end
 
-#    def day
-#
-#    end
-#
-#    def sem
-#
-#    end
-#
-#    def ngt
-#    end
+    def day
+      collection = []
+      @timeslot_collection.each do |t_collection|
+        if t_collection.name.include?("day")
+          collection << t_collection
+        end
+      end
+      return collection
+    end
+
+    def sem
+      collection = []
+      @timeslot_collection.each do |t_collection|
+        if t_collection.name.include?("sem")
+          collection << t_collection
+        end
+      end
+      return collection
+    end
+
+    def ngt
+      collection = []
+      @timeslot_collection.each do |t_collection|
+        if t_collection.name.include?("ngt")
+          collection << t_collection
+        end
+      end
+      return collection
+    end
   end
 
 
   class NurseParser < NurseCollection
     def initialize(n_collection)
-    @nurse_collection = n_collection
+      @nurse_collection = n_collection
     end
 
     def any

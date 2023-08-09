@@ -25,14 +25,14 @@ end
 nurse "nurse 9" do
 end
 
-at_most 4 do
-  timeslot {any} & nurse {any}
+exactly 1 do
+  timeslot {day} & nurse {any}
 end
 
 exactly 1 do
-  timeslot {any} & nurse {any}
+  timeslot {sem} & nurse {any}
 end
 
-at_least 1 do
-  timeslot {any} & nurse {any}
+exactly 1 do
+  timeslot {ngt} & nurse {any}
 end
