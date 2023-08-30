@@ -12,6 +12,7 @@ module Swallow
     def format(ast)
       auk = ""
       ast.nodes.each do |node|
+        binding.irb
         auk << node.to_auk
       end
       formatter = Rufo::Formatter.new(auk)
@@ -92,8 +93,10 @@ module Swallow
       nrs_periods = []
 
       ast.nodes.each do |node|
-        next unless node.is_a? Timeslot
-        n_timeslots << node.name
+        next unless node.is_a? TimeslotInitializer
+        node.timeslots.each do |timeslot|
+          n_timeslots << timeslot.name
+        end
       end
       ast.nodes.each do |node|
         next unless node.is_a? Nurse

@@ -16,7 +16,7 @@ module Swallow
     def timeslot(&block)
       timeslot_initializer = TimeslotInitializer.new
       timeslot_initializer.instance_eval(&block)
-      @ast << timeslot_initializer.timeslots
+      @ast << timeslot_initializer
       timeslot_initializer.timeslots.each { |t|
         @ast_timeslot_collection << t
       }

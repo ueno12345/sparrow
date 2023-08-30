@@ -56,10 +56,8 @@ module Swallow
 
       resources.nodes.each do |resource|
         case resource
-        # when TimeslotInitializer # HACK: AST全体にComposite patternを適用する？
-        #   timeslots = resource.timeslots
-        when Timeslot
-          timeslots << resource
+        when TimeslotInitializer # HACK: AST全体にComposite patternを適用する？
+          timeslots = resource.timeslots
         when Nurse
           nurses << resource
         end
