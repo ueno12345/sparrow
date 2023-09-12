@@ -68,7 +68,7 @@ module Swallow
   # # AUK Generator
   # あとから実装
   case option[:format]
-  # when "auk" then puts ast.to_auk
+  when "auk" then puts ast.to_auk
   when "html" then puts ast.to_html
   # when "csv" then puts ast.to_csv
   end

@@ -18,7 +18,6 @@ class Resource
     <<~AUK
       #{block_name} #{@name ? "\"#{@name}\"" : nil} do
         #{@domain.to_auk}
-        #{@belongs_to.empty? ? nil : "belongs_to \"#{@belongs_to}\""}
       end
 
     AUK

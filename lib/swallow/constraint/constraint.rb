@@ -2,24 +2,29 @@ require "active_support/all"
 require_relative "collection"
 
 class Constraint
-#  def initialize
-#    @nurses
-#  end
+  def initialize
+    @timeslot
+    @nurse
+  end
 
-#  def nurses(*nrs)
-#    @nurses = nrs
-#  end
+  def timeslot(*ts)
+    @timeslot = ts
+  end
 
-#  def to_auk
-#    <<~AUK
-#      #{self.class.name.underscore} do
-#        nurses #{@nurses.map { |i| %("#{i}") }.join(",")}
-#      end
-#
-#    AUK
-# end
+  def nurse(*nr)
+    @nurse = nr
+  end
 
-#  def domain_period; end
+  def to_auk
+    <<~AUK
+      #{self.class.name.underscore} #{@num} do
+        timeslot {#{@timeslot}} & nurse {#{@nurse}}
+      end
+
+    AUK
+  end
+
+  def domain_period; end
 
   def domain_exec(_ptable)
     Ravensat::InitialNode.new
