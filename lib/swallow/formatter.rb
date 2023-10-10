@@ -12,7 +12,7 @@ module Swallow
     def format(ast)
       auk = ""
       ast.nodes.each do |node|
-        binding.irb
+        # binding.irb
         auk << node.to_auk
       end
       formatter = Rufo::Formatter.new(auk)
