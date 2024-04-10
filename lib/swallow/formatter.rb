@@ -5,14 +5,15 @@ require "rufo"
 
 module Swallow
   class Formatter
-    def format(ast); end
+    def format(ast);
+      #例外処理を書く
+    end
   end
 
   class AUKFormatter < Formatter
     def format(ast)
       auk = ""
       ast.nodes.each do |node|
-        # binding.irb
         auk << node.to_auk
       end
       formatter = Rufo::Formatter.new(auk)
@@ -74,6 +75,63 @@ module Swallow
       csv.map(&:to_csv).reduce { |result, item| "#{result}#{item}\n" }.chomp
     end
   end
+
+class JSONFormatter < Formatter
+  def format(ast)
+    n_timeslots = []
+    n_nurses = []
+    c_nurses = []
+    nrs_periods = []
+
+    ast.nodes.each do |node|
+      next unless node.is_a? TimeslotInitializer
+      node.timeslots.each do |timeslot|
+        n_timeslots << timeslot.name
+      end
+    end
+
+    ast.nodes.each do |node|
+      next unless node.is_a? Nurse
+      n_nurses << node.name
+      nurse = node.name
+      node.domain.constraints.first.timeslots.each do |timeslot|
+        c_nurses = timeslot
+        nrs_periods.append [nurse, c_nurses]
+      end
+    end
+    #shift_json は 看護師名，日付，勤務形態を持つJSON
+    shift_json = []
+
+    nrs_periods.uniq.each do |data|
+      # data[0]は看護師名
+      # data[1]は 20240320day のような形
+      # date=20240320 shift_type=day のようにする
+      split_date = data[1].match(/(\d+)(\D+)/)
+      date = Date.parse(split_date[1])
+      case split_date[2]
+      when "day"
+        shift_type = "日勤"
+      when "sem"
+        shift_type = "準夜勤"
+      when "ngt"
+        shift_type = "深夜勤"
+      else
+        shift_type = "休み"
+      end
+
+      shift_json << {"name" => data[0], "date" => date, "shift_type" => shift_type}
+    end
+    #range を取得
+    dates = n_timeslots.map {|date| date.match(/\d{8}/)[0]}.uniq
+    dates.sort!
+    date_range = {"start" => dates.first, "end" => dates.last}
+    #shift とrange の情報を持ったjson
+    json = {"shifts" => shift_json, "date_range" => date_range}
+
+    return JSON.generate(json)
+  end
+end
+
 
   class HTMLFormatter < Formatter
     # def slot_content(nurse, timeslot, nrs_periods)
