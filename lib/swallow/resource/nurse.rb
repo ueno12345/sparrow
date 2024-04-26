@@ -1,8 +1,8 @@
 # coding: utf-8
 class Nurse < Resource
-#  def timeslots(*timeslots)
-#    @domain.add(timeslots, __method__)
-#  end
+  def timeslots(*timeslots)
+    @domain.add(timeslots, __method__)
+  end
 
 #  def frequency(num)
 #    @domain.add(num, __method__)

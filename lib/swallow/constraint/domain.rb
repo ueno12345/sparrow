@@ -169,9 +169,13 @@ class DomainTimeslots < DomainComponent
   end
 
   def to_auk
-    <<~AUK
-      timeslots #{@timeslots.map { |i| %("#{i}") }.join(",")}
-    AUK
+    if @timeslots.blank?
+      ""
+    else
+      <<~AUK
+        timeslots #{@timeslots.map { |i| %("#{i}") }.join(",")}
+      AUK
+    end
   end
 
   def prun(ptable, parent)
