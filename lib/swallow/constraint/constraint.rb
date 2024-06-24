@@ -16,12 +16,14 @@ class Constraint
   end
 
   def to_auk
-    <<~AUK
-      #{self.class.name.underscore} #{@num} do
-        timeslot {#{@timeslot}} & nurse {#{@nurse}}
-      end
-
-    AUK
+    ""
+    # 割当が決まったから制約はなくてもよいのでは
+    # <<~AUK
+    #   #{self.class.name.underscore} #{@num} do
+    #     timeslot {#{@timeslot}} & nurse {#{@nurse}}
+    #   end
+    # 
+    # AUK
   end
 
   def domain_period; end

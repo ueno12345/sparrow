@@ -47,5 +47,4 @@ class Nurse < Resource
   def group(*groups)
     @domain.add(groups, __method__)
   end
-
 end

@@ -55,7 +55,7 @@ module Swallow
     ptable.group_by { |i| i.nurse.name }.each_value do |nrs_ptable|
       timeslots = []
       nurse = nrs_ptable.first.nurse
-      nrs_ptable.select { |i| i.value.value }.each do |e|
+      nrs_ptable.select { |i| i.value}.each do |e|
         timeslots.append e.timeslot.name
       end
       nurse.domain.update(timeslots.uniq, :timeslots)
