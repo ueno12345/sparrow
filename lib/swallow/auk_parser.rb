@@ -17,23 +17,22 @@ module Swallow
       timeslot_initializer = TimeslotInitializer.new
       timeslot_initializer.instance_eval(&block)
       @ast << timeslot_initializer
-      timeslot_initializer.timeslots.each { |t|
+      timeslot_initializer.timeslots.each do |t|
         @ast_timeslot_collection << t
-      }
+      end
     end
 
-#    def timeslots(&block)
-#      timeslot_initializer = TimeslotInitializer.new
-#      timeslot_initializer.instance_eval(&block)
-#      @ast << timeslot_initializer
-#    end
+    #    def timeslots(&block)
+    #      timeslot_initializer = TimeslotInitializer.new
+    #      timeslot_initializer.instance_eval(&block)
+    #      @ast << timeslot_initializer
+    #    end
 
-#    def timeslot(name, &block)
-#      timeslot_initializer = @ast.nodes.find{|i|i.is_a? TimeslotInitializer}
-#      timeslot = timeslot_initializer.timeslots.find{|i|i.name == name}
-#      timeslot.instance_eval(&block)
-#    end
-
+    #    def timeslot(name, &block)
+    #      timeslot_initializer = @ast.nodes.find{|i|i.is_a? TimeslotInitializer}
+    #      timeslot = timeslot_initializer.timeslots.find{|i|i.name == name}
+    #      timeslot.instance_eval(&block)
+    #    end
 
     def nurse(name, &block)
       nurse = Nurse.new(name)
@@ -46,8 +45,8 @@ module Swallow
       constraint = AtMost.new(num, @ast_timeslot_collection, @ast_nurse_collection)
       resources = constraint.instance_eval(&block)
       constraint.resources = resources
-      #@cnf &= Ravensat::Claw.at_most(array, num)
-      #XXX: constraint.is_a Array
+      # @cnf &= Ravensat::Claw.at_most(array, num)
+      # XXX: constraint.is_a Array
       @ast << constraint
     end
 

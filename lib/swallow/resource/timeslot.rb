@@ -27,15 +27,6 @@ class TimeslotInitializer < Resource
 #  def unavailable(*timeslots)
 #    @domain.add(timeslots, __method__)
 #  end
-  # def nr_days_a_week(num)
-  #   @domain.add(num, __method__)
-  #   period_initialize
-  # end
-
-  # def nr_periods(num)
-  #   @domain.add(num, __method__)
-  #   period_initialize
-  # end
 
   private
 
@@ -54,18 +45,6 @@ class Timeslot < Resource
   def initialize(name = nil)
     super
   end
-
-#  def frequency(num)
-#    @domain.add(num, __method__)
-#  end
-
-#  def at_least(num)
-#    @domain.add(num, __method__)
-#  end
-
-#  def at_most(num)
-#    @domain.add(num, __method__)
-#  end
 
   def to_auk; end
 end

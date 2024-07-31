@@ -1,4 +1,3 @@
-# coding: utf-8
 require "ravensat"
 require "forwardable"
 
@@ -14,45 +13,6 @@ module Swallow
       # preprocessing
       timeslots = []
       nurses = []
-      
-      # resources.nodes.each do |resource|
-      #   case resource
-      #   when AtMost
-      #     resources.nodes.last.resources.each do |time| 
-      #       timeslots << timeslot.first 
-      #     end
-      #     resources.nodes.last.resources.each do |nurse| 
-      #       nurses << nurse.last
-      #     end
-      #     timeslots = timeslots.uniq
-      #     nurses = nurses.uniq
-      #   when AtLeast
-      #     resources.nodes.last.resources.each do |time| 
-      #       timeslots << timeslot.first 
-      #     end
-      #     resources.nodes.last.resources.each do |nurse| 
-      #       nurses << nurse.last
-      #     end
-      #     timeslots = timeslots.uniq
-      #     nurses = nurses.uniq
-      #   when Exactly
-      #     resource.resources.each do |timeslot| 
-      #       timeslots << timeslot.first
-      #     end
-      #     resource.resources.each do |nurse| 
-      #       nurses << nurse.last
-      #     end
-# 
-      #     timeslots = timeslots.uniq
-      #     nurses = nurses.uniq
-      #   
-      #     timeslots.each do |timeslot|
-      #       nurses.each do |nurse|
-      #         @table << PropVar.new(timeslot, nurse)
-      #       end
-      #     end
-      #   end
-      # end
 
       resources.nodes.each do |resource|
         case resource

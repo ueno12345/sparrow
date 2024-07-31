@@ -22,30 +22,10 @@ module Swallow
   parser = AUKParser.new
   parser.parse File.read(ARGV[0]) if ARGV[0]
 
-  ################
-  #2023/7/12
-  #ast.size で29と出たためastは入ってそう
-  #timelot 7*3 nurse 7 at_most 1
-  ##################
   ast = parser.ast
   # SAT Encoder
-  ################
-  #2023/7/12
-  #ptable が空っぽ
-  #本来は7*3*7の149になるはず
-  #149はなった
-  ##################
-#  p "making ptable..."
   ptable = PropTable.new(ast)
-#  p "Done"
-  ################
-  #2023/7/12
-  #gems/ravensat-1.1.1/lib/ravensat/ast/initial_node.rb:4:in `&': NilClass can't be coerced into Ravensat::Node (TypeError)
-  ##################
-#  p "making CNF..."
   formula = ast.to_cnf(ptable)
-#  p "Done"
-#  p "solving..."
 
   # Solving
   solver = Ravensat::Solver.new(option[:solver])
@@ -55,7 +35,7 @@ module Swallow
     ptable.group_by { |i| i.nurse.name }.each_value do |nrs_ptable|
       timeslots = []
       nurse = nrs_ptable.first.nurse
-      nrs_ptable.select { |i| i.value}.each do |e|
+      nrs_ptable.select { |i| i.value.value }.each do |e|
         timeslots.append e.timeslot.name
       end
       nurse.domain.update(timeslots.uniq, :timeslots)
@@ -64,12 +44,11 @@ module Swallow
     puts "UNSAT"
     exit
   end
-
   # # AUK Generator
   # あとから実装
   case option[:format]
   when "auk" then puts ast.to_auk
   when "html" then puts ast.to_html
-  # when "csv" then puts ast.to_csv
+    # when "csv" then puts ast.to_csv
   end
 end

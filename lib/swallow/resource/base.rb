@@ -27,7 +27,7 @@ class Resource
     @domain.prun(ptable, self)
   end
 
-  def domain_exec(ptable)
+  def domain_exec(ptable, node)
     @domain.exec(ptable, self)
   end
 

@@ -1,25 +1,23 @@
 class Array
   def to_collection
-    Collection.new{|obj| obj.send(self)}
+    Collection.new { |obj| obj.send(self) }
   end
 end
 
 class Collection < Array
-    def &(target)
-      # 後で考え直す
-      # self と target がぐちゃぐちゃ（同じになっている）
-      a = self.first.product target.last
-      #b = a.to_collection
-    return a
-    end
-
-#    def *(target)
-#      self.select {|x| x.name.include?(target)}
-#    end
+  def &(other)
+    # 後で考え直す
+    # self と target がぐちゃぐちゃ（同じになっている）
+    first.product other.last
   end
 
-  class NurseCollection < Collection
-  end
+  # def *(other)
+  #  self.select { |x| x.name.include?(other) }
+  # end
+end
 
-  class TimeslotCollection < Collection
+class NurseCollection < Collection
+end
+
+class TimeslotCollection < Collection
 end
