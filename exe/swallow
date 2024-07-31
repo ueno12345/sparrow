@@ -10,7 +10,7 @@ module Swallow
   OptionParser.new do |opt|
     opt.banner = "Usage: swallow [options] <auk_file>"
     opt.on("-d", "--debug", "                       (default: false)") { |v| option[:debug] = v }
-    opt.on("-f", "--format [VALUE]", ["auk", "html", "csv"], "[auk | html | csv]     (default: auk)") do |v|
+    opt.on("-f", "--format [VALUE]", ["auk", "html", "json", "csv"], "[auk | html | json | csv]     (default: auk)") do |v|
       option[:format] = v
     end
     opt.on("-s", "--solver [VALUE]", "<solver name>          (default: minisat)") { |v| option[:solver] = v }
@@ -49,6 +49,7 @@ module Swallow
   case option[:format]
   when "auk" then puts ast.to_auk
   when "html" then puts ast.to_html
+  when "json" then puts ast.to_json
     # when "csv" then puts ast.to_csv
   end
 end
