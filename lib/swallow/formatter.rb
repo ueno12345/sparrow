@@ -33,7 +33,9 @@ module Swallow
       # Domain execution
       ast.nodes.each do |node|
         tmp = node.domain_exec(ptable, node)
-        cnf &= tmp.first.first unless tmp.first.first.is_a? Ravensat::InitialNode
+        tmp.each do |t|
+          cnf &= t.first unless t.first.is_a? Ravensat::InitialNode
+        end
       end
 
       # Exactly One nurse
