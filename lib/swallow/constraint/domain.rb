@@ -25,28 +25,14 @@ class Domain < DomainComponent
 
   def add(domain, method_name)
     case method_name
-    # when :nr_days_a_week
-    #   constraint = DomainNrDays.new(domain.first)
-    # when :nr_periods
-    #   constraint = DomainNrPeriods.new(domain.first)
-    when :wday
-      constraint = DomainWday.new(domain)
+    when :days
+      constraint = DomainDays.new(domain)
     when :period
       constraint = DomainPeriod.new(domain)
-    when :unavailable
-      constraint = DomainUnavailable.new(domain)
-    when :rooms
-      constraint = DomainRooms.new(domain)
-    when :instructors
-      constraint = DomainInstructors.new(domain)
+    #    when :unavailable
+    #      constraint = DomainUnavailable.new(domain)
     when :timeslots
       constraint = DomainTimeslots.new(domain)
-    when :term
-      constraint = DomainTerm.new(domain)
-    when :frequency
-      constraint = DomainFrequency.new(domain)
-    when :consecutive
-      constraint = DomainConsecutive.new(domain)
     when :rem
       constraint = DomainRem.new(domain)
     end
@@ -56,24 +42,14 @@ class Domain < DomainComponent
 
   def remove(method_name)
     case method_name
-    when :wday
-      @constraints.delete_if{|constraint| constraint.is_a? DomainWday}
+    when :days
+      @constraints.delete_if{|constraint| constraint.is_a? DomainDays}
     when :period
       @constraints.delete_if{|constraint| constraint.is_a? DomainPeriod}
-    when :unavailable
-      @constraints.delete_if{|constraint| constraint.is_a? DomainUnavailable}
-    when :rooms
-      @constraints.delete_if{|constraint| constraint.is_a? DomainRooms}
-    when :instructors
-      @constraints.delete_if{|constraint| constraint.is_a? DomainInstructors}
+    #    when :unavailable
+    #      @constraints.delete_if{|constraint| constraint.is_a? DomainUnavailable}
     when :timeslots
       @constraints.delete_if{|constraint| constraint.is_a? DomainTimeslots}
-    when :term
-      @constraints.delete_if{|constraint| constraint.is_a? DomainTerm}
-    when :frequency
-      @constraints.delete_if{|constraint| constraint.is_a? DomainFrequency}
-    when :consecutive
-      @constraints.delete_if{|constraint| constraint.is_a? DomainConsecutive}
     end
   end
 
@@ -105,44 +81,16 @@ class Domain < DomainComponent
   end
 end
 
-# class DomainNrDays < DomainComponent
-#   attr_reader :nr_days_a_week
+class DomainDays < DomainComponent
+  attr_reader :pdays
 
-#   def initialize(nr_days_a_week)
-#     @nr_days_a_week = nr_days_a_week
-#   end
-
-#   def to_auk
-#     <<~AUK
-#       nr_days_a_week #{@nr_days_a_week}
-#     AUK
-#   end
-# end
-
-# class DomainNrPeriods < DomainComponent
-#   attr_reader :nr_periods
-
-#   def initialize(nr_periods)
-#     @nr_periods = nr_periods
-#   end
-
-#   def to_auk
-#     <<~AUK
-#       nr_periods #{@nr_periods}
-#     AUK
-#   end
-# end
-
-class DomainWday < DomainComponent
-  attr_reader :wdays
-
-  def initialize(wdays)
-    @wdays = wdays
+  def initialize(pdays)
+    @pdays = pdays
   end
 
   def to_auk
     <<~AUK
-      wday #{@wdays.map { |i| %("#{i}") }.join(",")}
+      days #{@pdays.map { |i| %("#{i}") }.join(",")}
     AUK
   end
 end
@@ -169,132 +117,45 @@ class DomainTimeslots < DomainComponent
   end
 
   def to_auk
-    <<~AUK
-      timeslots #{@timeslots.map { |i| %("#{i}") }.join(",")}
-    AUK
-  end
-
-  def prun(ptable, parent)
-    ptable.reject!{|i| (parent.name == i.lecture.name) && !@timeslots.include?(i.timeslot.name)}
-  end
-end
-
-class DomainTerm < DomainComponent
-  attr_reader :term
-
-  def initialize(term)
-    @term = term
-  end
-
-  def to_auk
-    <<~AUK
-      term #{@term}
-    AUK
-  end
-end
-
-class DomainUnavailable < DomainComponent
-  attr_reader :unavailable_timeslots
-
-  def initialize(unavailable_timeslots)
-    @unavailable_timeslots = unavailable_timeslots
-  end
-
-  def to_auk
-    <<~AUK
-      unavailable #{@unavailable_timeslots.map { |i| %("#{i}") }.join(",")}
-    AUK
-  end
-
-  def prun(ptable, parent)
-    # require 'pry'
-    # binding.pry
-    case parent
-    when Room
-      ptable.reject!{|i| (parent.name == i.room.name) && @unavailable_timeslots.include?(i.timeslot.name)}
-    when Instructor
-      ptable.reject!{|i| (parent.name == i.instructor.name) && @unavailable_timeslots.include?(i.timeslot.name)}
-    when TimeslotInitializer
-      ptable.reject!{|i| @unavailable_timeslots.include?(i.timeslot.name)}
+    if @timeslots.blank?
+      ""
+    else
+      <<~AUK
+        timeslots #{@timeslots.map { |i| %("#{i}") }.join(",")}
+      AUK
     end
   end
+
+  # def prun(ptable, parent)
+  #   ptable.reject!{|i| (parent.name == i.nurse.name) && !(@timeslots.any? { |timeslot| timeslot == i.timeslot.name })}
+  #   # ptable.reject!{|i| (parent.name == i.nurse.name) && !@timeslots.include?(i.timeslot.name)}
+  #   # ptable.select{|i| (parent.name == i.nurse.name) && (@timeslots.any? { |timeslot| timeslot == i.timeslot.name })}
+  # end
 end
 
-class DomainRooms < DomainComponent
-  def initialize(rooms)
-    @rooms = rooms
-  end
+# class DomainUnavailable < DomainComponent
+#  attr_reader :unavailable_timeslots
 
-  def to_auk
-    <<~AUK
-      rooms #{@rooms.map { |i| %("#{i}") }.join(",")}
-    AUK
-  end
+#  def initialize(unavailable_timeslots)
+#    @unavailable_timeslots = unavailable_timeslots
+#  end
 
-  def prun(ptable, parent)
-    ptable.reject!{|i| (parent.name == i.lecture.name) && !@rooms.include?(i.room.name)}
-  end
-end
+#  def to_auk
+#    <<~AUK
+#      unavailable #{@unavailable_timeslots.map { |i| %("#{i}") }.join(",")}
+#    AUK
+#  end
 
-class DomainInstructors < DomainComponent
-  def initialize(instructors)
-    @instructors = instructors
-  end
+#  def prun(ptable, parent)
+# require 'pry'
+# binding.pry
 
-  def to_auk
-    <<~AUK
-      instructors #{@instructors.map { |i| %("#{i}") }.join(",")}
-    AUK
-  end
-
-  def prun(ptable, parent)
-    ptable.reject!{|i| (parent.name == i.lecture.name) && !@instructors.include?(i.instructor.name)}
-  end
-end
-
-class DomainFrequency < DomainExecutor
-  def initialize(frequency)
-    @frequency = frequency
-  end
-
-  def to_auk
-    <<~AUK
-      frequency #{@frequency}
-    AUK
-  end
-
-  def exec(ptable, parent)
-    cnf = Ravensat::InitialNode.new
-
-    cnf &= Ravensat::Claw.at_least_k(ptable.select{|i| i.lecture.name == parent.name}.map(&:value), @frequency)
-    cnf &= Ravensat::Claw.commander_at_most_k(ptable.select{|i| i.lecture.name == parent.name}.map(&:value), @frequency)
-    cnf
-  end
-end
-
-class DomainConsecutive < DomainExecutor
-  def initialize(consecutive)
-    @consecutive = consecutive
-  end
-
-  def to_auk
-    <<~AUK
-      consecutive #{@consecutive}
-    AUK
-  end
-
-  def exec(ptable, parent)
-    c_vars = []
-    cnf = Ravensat::InitialNode.new
-    ptable.select{|i| i.lecture.name == parent.name}.map(&:value).each_cons(@consecutive) do |node_group|
-      c = Ravensat::VarNode.new
-      c_vars.append c
-      cnf &= node_group.map{|node| node | ~c}.reduce(:&)
-    end
-    cnf &= Ravensat::Claw.exactly_one(c_vars)
-    cnf
-  end
-end
+#    case parent
+#    when TimeslotInitializer
+#      ptable.reject!{|i| @unavailable_timeslots.include?(i.timeslot.name)}
+#    end
+#  end
+# end
 
 class DomainRem < DomainComponent
   def initialize(comment)

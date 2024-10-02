@@ -7,7 +7,7 @@ class Resource
   def initialize(name = nil)
     @name = name
     @domain = Domain.new
-    @belongs_to = ""
+    # @belongs_to = ""
   end
 
   def block_name
@@ -18,7 +18,6 @@ class Resource
     <<~AUK
       #{block_name} #{@name ? "\"#{@name}\"" : nil} do
         #{@domain.to_auk}
-        #{@belongs_to.empty? ? nil : "belongs_to \"#{@belongs_to}\""}
       end
 
     AUK
@@ -28,7 +27,7 @@ class Resource
     @domain.prun(ptable, self)
   end
 
-  def domain_exec(ptable)
+  def domain_exec(ptable, node)
     @domain.exec(ptable, self)
   end
 

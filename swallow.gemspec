@@ -34,4 +34,9 @@ Gem::Specification.new do |spec|
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
+  spec.add_dependency "activesupport"
+  spec.add_dependency "nokogiri"
+  spec.add_dependency "ravensat"
+  spec.add_dependency "rufo"
+  spec.add_dependency "sycamore"
 end

@@ -10,7 +10,8 @@ module Swallow
   OptionParser.new do |opt|
     opt.banner = "Usage: swallow [options] <auk_file>"
     opt.on("-d", "--debug", "                       (default: false)") { |v| option[:debug] = v }
-    opt.on("-f", "--format [VALUE]", ["auk", "html", "csv"], "[auk | html | csv]     (default: auk)") do |v|
+    opt.on("-f", "--format [VALUE]", %w[auk html json csv],
+           "[auk | html | json | csv]     (default: auk)") do |v|
       option[:format] = v
     end
     opt.on("-s", "--solver [VALUE]", "<solver name>          (default: minisat)") { |v| option[:solver] = v }
@@ -21,8 +22,8 @@ module Swallow
   # AUK Parser
   parser = AUKParser.new
   parser.parse File.read(ARGV[0]) if ARGV[0]
-  ast = parser.ast
 
+  ast = parser.ast
   # SAT Encoder
   ptable = PropTable.new(ast)
   formula = ast.to_cnf(ptable)
@@ -32,29 +33,24 @@ module Swallow
   if solver.solve formula, solver_log: option[:debug]
     # SAT Decoding
     # TODO: Make Decode Class
-    ptable.group_by { |i| i.lecture.name }.each_value do |lec_ptable|
-      rooms = []
-      instructors = []
+    ptable.group_by { |i| i.nurse.name }.each_value do |nrs_ptable|
       timeslots = []
-      lecture = lec_ptable.first.lecture
-      lec_ptable.select { |i| i.value.value }.each do |e|
-        rooms.append e.room.name
-        instructors.append e.instructor.name
+      nurse = nrs_ptable.first.nurse
+      nrs_ptable.select { |i| i.value.value }.each do |e|
         timeslots.append e.timeslot.name
       end
-      lecture.domain.update(rooms.uniq, :rooms)
-      lecture.domain.update(instructors.uniq, :instructors)
-      lecture.domain.update(timeslots.uniq, :timeslots)
+      nurse.domain.update(timeslots.uniq, :timeslots)
     end
   else
     puts "UNSAT"
     exit
   end
-
-  # AUK Generator
+  # # AUK Generator
+  # あとから実装
   case option[:format]
   when "auk" then puts ast.to_auk
   when "html" then puts ast.to_html
-  when "csv" then puts ast.to_csv
+  when "json" then puts ast.to_json
+    # when "csv" then puts ast.to_csv
   end
 end

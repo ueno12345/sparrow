@@ -25,5 +25,10 @@ module Swallow
       html_formatter = HTMLFormatter.new
       html_formatter.format self
     end
+
+    def to_json(*_args)
+      json_formatter = JSONFormatter.new
+      json_formatter.format self
+    end
   end
 end
