@@ -226,33 +226,86 @@ class TimeslotParser < TimeslotCollection
     @timeslot_collection = t_collection
   end
 
+  #  def method_missing(method, *args)
+  #    expression = method.to_s
+  #
+  #    # パターン1: 数字のみ（例: 20240901）
+  #    if expression =~ /(\d+)/
+  #      date = Regexp.last_match(1)
+  #      Collection.new(@timeslot_collection.select { |t| t.include?(date) })
+  #
+  #    # パターン2: 数字とキーワード（例: 20240901*day）
+  #    elsif expression =~ /(\d+)\*(\w+)/
+  #      date = Regexp.last_match(1)
+  #      keyword = Regexp.last_match(2)
+  #      Collection.new(@timeslot_collection.select { |t| t.include?(date) && t.include?(keyword) })
+  #
+  #    # パターン3: キーワードと数字（例: day*20240901）
+  #    elsif expression =~ /(\w+)\*(\d+)/
+  #      keyword = Regexp.last_match(1)
+  #      date = Regexp.last_match(2)
+  #      Collection.new(@timeslot_collection.select { |t| t.include?(date) && t.include?(keyword) })
+  #
+  #    else
+  #      super
+  #    end
+  #  end
+
+  def filter_by_keyword(keyword)
+    if keyword == "any"
+      @timeslot_collection
+    else
+      collection = []
+      @timeslot_collection.each do |t_collection|
+        collection << t_collection if t_collection.name.include?(keyword)
+      end
+      collection
+    end
+  end
+
   def any
-    @timeslot_collection
+    filter_by_keyword("any")
   end
 
   def day
-    collection = []
-    @timeslot_collection.each do |t_collection|
-      collection << t_collection if t_collection.name.include?("day")
-    end
-    collection
+    filter_by_keyword("day")
   end
 
   def sem
-    collection = []
-    @timeslot_collection.each do |t_collection|
-      collection << t_collection if t_collection.name.include?("sem")
-    end
-    collection
+    filter_by_keyword("sem")
   end
 
   def ngt
-    collection = []
-    @timeslot_collection.each do |t_collection|
-      collection << t_collection if t_collection.name.include?("ngt")
-    end
-    collection
+    filter_by_keyword("ngt")
   end
+
+  #  def any
+  #    @timeslot_collection
+  #  end
+  #
+  #  def day
+  #    collection = []
+  #    @timeslot_collection.each do |t_collection|
+  #      collection << t_collection if t_collection.name.include?("day")
+  #    end
+  #    collection
+  #  end
+  #
+  #  def sem
+  #    collection = []
+  #    @timeslot_collection.each do |t_collection|
+  #      collection << t_collection if t_collection.name.include?("sem")
+  #    end
+  #    collection
+  #  end
+  #
+  #  def ngt
+  #    collection = []
+  #    @timeslot_collection.each do |t_collection|
+  #      collection << t_collection if t_collection.name.include?("ngt")
+  #    end
+  #    collection
+  #  end
 end
 
 class NurseParser < NurseCollection

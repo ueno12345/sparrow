@@ -6,14 +6,20 @@ end
 
 class Collection < Array
   def &(other)
-    # 後で考え直す
-    # self と target がぐちゃぐちゃ（同じになっている）
     first.product other.last
   end
 
-  # def *(other)
-  #  self.select { |x| x.name.include?(other) }
-  # end
+  def +(other)
+    Collection.new((self + other).uniq)
+  end
+
+  def *(other)
+    if other.is_a?(Numeric)
+      Collection.new(select { |item| item.include?(other.to_s) })
+    else
+      Collection.new(self & other)
+    end
+  end
 end
 
 class NurseCollection < Collection
