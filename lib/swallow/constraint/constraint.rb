@@ -226,86 +226,47 @@ class TimeslotParser < TimeslotCollection
     @timeslot_collection = t_collection
   end
 
+  def day(date = nil)
+    result = filter_by_date_and_keyword("day", date)
+    # 結果を返す
+    result
+  end
+
+  def sem(date = nil)
+    result = filter_by_date_and_keyword("sem", date)
+    # 結果を返す
+    result
+  end
+
+  def ngt(date = nil)
+    result = filter_by_date_and_keyword("ngt", date)
+    # 結果を返す
+    result
+  end
+
+  def any
+    @timeslot_collection
+  end
+
   #  def method_missing(method, *args)
-  #    expression = method.to_s
-  #
-  #    # パターン1: 数字のみ（例: 20240901）
-  #    if expression =~ /(\d+)/
-  #      date = Regexp.last_match(1)
-  #      Collection.new(@timeslot_collection.select { |t| t.include?(date) })
-  #
-  #    # パターン2: 数字とキーワード（例: 20240901*day）
-  #    elsif expression =~ /(\d+)\*(\w+)/
-  #      date = Regexp.last_match(1)
-  #      keyword = Regexp.last_match(2)
-  #      Collection.new(@timeslot_collection.select { |t| t.include?(date) && t.include?(keyword) })
-  #
-  #    # パターン3: キーワードと数字（例: day*20240901）
-  #    elsif expression =~ /(\w+)\*(\d+)/
-  #      keyword = Regexp.last_match(1)
-  #      date = Regexp.last_match(2)
-  #      Collection.new(@timeslot_collection.select { |t| t.include?(date) && t.include?(keyword) })
-  #
+  #    if args.size == 1 && args[0].to_s =~ /\A\d{8}\z/
+  #      # キーワードとして解釈し、日付フィルタを適用
+  #      keyword = method.to_s
+  #      filter_by_date_and_keyword(keyword, args[0])
   #    else
   #      super
   #    end
   #  end
 
-  def filter_by_keyword(keyword)
-    if keyword == "any"
-      @timeslot_collection
-    else
-      collection = []
-      @timeslot_collection.each do |t_collection|
-        collection << t_collection if t_collection.name.include?(keyword)
+  private
+
+  def filter_by_date_and_keyword(keyword, date = nil)
+    TimeslotCollection.new(
+      @timeslot_collection.select do |timeslot|
+        timeslot.name.include?(keyword) && (date.nil? || timeslot.name.include?(date.to_s))
       end
-      collection
-    end
+    )
   end
-
-  def any
-    filter_by_keyword("any")
-  end
-
-  def day
-    filter_by_keyword("day")
-  end
-
-  def sem
-    filter_by_keyword("sem")
-  end
-
-  def ngt
-    filter_by_keyword("ngt")
-  end
-
-  #  def any
-  #    @timeslot_collection
-  #  end
-  #
-  #  def day
-  #    collection = []
-  #    @timeslot_collection.each do |t_collection|
-  #      collection << t_collection if t_collection.name.include?("day")
-  #    end
-  #    collection
-  #  end
-  #
-  #  def sem
-  #    collection = []
-  #    @timeslot_collection.each do |t_collection|
-  #      collection << t_collection if t_collection.name.include?("sem")
-  #    end
-  #    collection
-  #  end
-  #
-  #  def ngt
-  #    collection = []
-  #    @timeslot_collection.each do |t_collection|
-  #      collection << t_collection if t_collection.name.include?("ngt")
-  #    end
-  #    collection
-  #  end
 end
 
 class NurseParser < NurseCollection

@@ -10,15 +10,15 @@ class Collection < Array
   end
 
   def +(other)
-    Collection.new((self + other).uniq)
+    # 再帰的な呼び出しを避け、selfとotherを直接結合して処理
+    Collection.new(super(other).uniq) # super を使って親クラスの + を呼び出す
   end
 
   def *(other)
-    if other.is_a?(Numeric)
-      Collection.new(select { |item| item.include?(other.to_s) })
-    else
-      Collection.new(self & other)
-    end
+    raise TypeError, "Argument must be a Collection or Array" unless other.is_a?(Collection) || other.is_a?(Array)
+
+    # 配列の共通部分
+    Collection.new(to_a & other.to_a)
   end
 end
 
