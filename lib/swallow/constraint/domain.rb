@@ -31,6 +31,10 @@ class Domain < DomainComponent
       constraint = DomainPeriod.new(domain)
     #    when :unavailable
     #      constraint = DomainUnavailable.new(domain)
+    when :group
+      constraint = DomainGroup.new(domain)
+    when :ladder
+      constraint = DomainLadder.new(domain)
     when :timeslots
       constraint = DomainTimeslots.new(domain)
     when :rem
@@ -48,6 +52,10 @@ class Domain < DomainComponent
       @constraints.delete_if{|constraint| constraint.is_a? DomainPeriod}
     #    when :unavailable
     #      @constraints.delete_if{|constraint| constraint.is_a? DomainUnavailable}
+    when :group
+      @constraints.delete_if{|constraint| constraint.is_a? DomainGroup}
+    when :ladder
+      @constraints.delete_if{|constraint| constraint.is_a? DomainLadder}
     when :timeslots
       @constraints.delete_if{|constraint| constraint.is_a? DomainTimeslots}
     end
@@ -105,6 +113,34 @@ class DomainPeriod < DomainComponent
   def to_auk
     <<~AUK
       period #{@periods.map { |i| %("#{i}") }.join(",")}
+    AUK
+  end
+end
+
+class DomainGroup < DomainComponent
+  attr_reader :groups
+
+  def initialize(groups)
+    @groups = groups
+  end
+
+  def to_auk
+    <<~AUK
+      group #{@groups.map { |i| %("#{i}") }.join(",")}
+    AUK
+  end
+end
+
+class DomainLadder < DomainComponent
+  attr_reader :ladder
+
+  def initialize(ladder)
+    @ladder_level = ladder
+  end
+
+  def to_auk
+    <<~AUK
+      ladder #{@ladder_level}
     AUK
   end
 end

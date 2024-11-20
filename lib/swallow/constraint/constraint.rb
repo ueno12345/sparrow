@@ -227,21 +227,15 @@ class TimeslotParser < TimeslotCollection
   end
 
   def day(date = nil)
-    result = filter_by_date_and_keyword("day", date)
-    # 結果を返す
-    result
+    filter_by_date_and_keyword("day", date)
   end
 
   def sem(date = nil)
-    result = filter_by_date_and_keyword("sem", date)
-    # 結果を返す
-    result
+    filter_by_date_and_keyword("sem", date)
   end
 
   def ngt(date = nil)
-    result = filter_by_date_and_keyword("ngt", date)
-    # 結果を返す
-    result
+    filter_by_date_and_keyword("ngt", date)
   end
 
   def any
@@ -278,13 +272,30 @@ class NurseParser < NurseCollection
     @nurse_collection
   end
 
-  # def ladder
-  #  LadderLevel.new(@nurse_collection)
-  # end
+  def group(group_name = nil)
+    NurseCollection.new(
+      @nurse_collection.select do |nurse|
+        nurse.groups.include?(group_name)
+      end
+    )
+  end
 
-  #    def name
-  #      Name.new(@nurse_collection)
-  #    end
+  def ladder(num = nil)
+    NurseCollection.new(
+      @nurse_collection.select do |nurse|
+        nurse.ladder.include?(num)
+      end
+    )
+  end
+
+  def name(nurse_name)
+    NurseCollection.new(
+      @nurse_collection.select do |nurse|
+        nurse.name.include?(nurse_name)
+      end
+    )
+  end
+
   #
   #    def team
   #      Team.new(@nurse_collection)
