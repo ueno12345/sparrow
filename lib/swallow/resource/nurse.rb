@@ -19,8 +19,8 @@ class Nurse < Resource
     @domain.add(num, __method__)
   end
 
-  def group(*groups)
-    @domain.add(groups, __method__)
+  def group(*group)
+    @domain.add(group, __method__)
   end
 
   def domain_exec(ptable, node)

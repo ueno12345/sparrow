@@ -275,7 +275,9 @@ class NurseParser < NurseCollection
   def group(group_name = nil)
     NurseCollection.new(
       @nurse_collection.select do |nurse|
-        nurse.groups.include?(group_name)
+        nurse.domain.constraints.any? do |constraint|
+          constraint.is_a?(DomainGroup) && constraint.group.include?(group_name)
+        end
       end
     )
   end
@@ -283,7 +285,9 @@ class NurseParser < NurseCollection
   def ladder(num = nil)
     NurseCollection.new(
       @nurse_collection.select do |nurse|
-        nurse.ladder.include?(num)
+        nurse.domain.constraints.any? do |constraint|
+          constraint.is_a?(DomainLadder) && constraint.ladder == num
+        end
       end
     )
   end

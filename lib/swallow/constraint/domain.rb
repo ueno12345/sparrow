@@ -118,15 +118,15 @@ class DomainPeriod < DomainComponent
 end
 
 class DomainGroup < DomainComponent
-  attr_reader :groups
+  attr_reader :group
 
-  def initialize(groups)
-    @groups = groups
+  def initialize(group)
+    @group = group
   end
 
   def to_auk
     <<~AUK
-      group #{@groups.map { |i| %("#{i}") }.join(",")}
+      group #{@group.map { |i| %("#{i}") }.join(",")}
     AUK
   end
 end
@@ -135,12 +135,12 @@ class DomainLadder < DomainComponent
   attr_reader :ladder
 
   def initialize(ladder)
-    @ladder_level = ladder
+    @ladder = ladder
   end
 
   def to_auk
     <<~AUK
-      ladder #{@ladder_level}
+      ladder #{@ladder}
     AUK
   end
 end
