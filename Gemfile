@@ -14,6 +14,8 @@ end
 
 gem "activesupport"
 gem "nokogiri"
-gem "ravensat"
+# gem "ravensat"
 gem "rufo"
 gem "sycamore"
+
+gem "ravensat", git: "https://github.com/ueno12345/ravensat.git", branch: "master"

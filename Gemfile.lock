@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/ueno12345/ravensat.git
+  revision: 33b37370640c995583d313598295e2e70c7424cd
+  branch: master
+  specs:
+    ravensat (1.1.1)
+
 PATH
   remote: .
   specs:
@@ -38,7 +45,6 @@ GEM
     racc (1.6.0)
     rainbow (3.1.1)
     rake (13.0.6)
-    ravensat (1.1.1)
     regexp_parser (2.5.0)
     rexml (3.2.5)
     rubocop (1.38.0)
@@ -69,7 +75,7 @@ DEPENDENCIES
   pre-commit
   pry
   rake (~> 13.0)
-  ravensat
+  ravensat!
   rubocop (~> 1.7)
   rufo
   swallow!
