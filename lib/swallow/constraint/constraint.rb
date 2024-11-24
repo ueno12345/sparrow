@@ -238,19 +238,13 @@ class TimeslotParser < TimeslotCollection
     filter_by_date_and_keyword("ngt", date)
   end
 
-  def any
-    @timeslot_collection
+  def any(date = nil)
+    TimeslotCollection.new(
+      @timeslot_collection.select do |timeslot|
+        date.nil? || timeslot.name.include?(date.to_s)
+      end
+    )
   end
-
-  #  def method_missing(method, *args)
-  #    if args.size == 1 && args[0].to_s =~ /\A\d{8}\z/
-  #      # キーワードとして解釈し、日付フィルタを適用
-  #      keyword = method.to_s
-  #      filter_by_date_and_keyword(keyword, args[0])
-  #    else
-  #      super
-  #    end
-  #  end
 
   private
 
