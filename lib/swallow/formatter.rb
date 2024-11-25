@@ -93,9 +93,13 @@ module Swallow
 
         n_nurses << node.name
         nurse = node.name
-        node.domain.constraints.first.timeslots.each do |timeslot|
-          c_nurses = timeslot
-          nrs_periods.append [nurse, c_nurses]
+        node.domain.constraints.each do |constraint|
+          next unless constraint.is_a?(DomainTimeslots)
+
+          constraint.timeslots.each do |timeslot|
+            c_nurses = timeslot
+            nrs_periods.append([nurse, c_nurses])
+          end
         end
       end
       # shift_json は 看護師名，日付，勤務形態を持つJSON
@@ -150,9 +154,13 @@ module Swallow
 
         n_nurses << node.name
         nurse = node.name
-        node.domain.constraints.first.timeslots.each do |timeslot|
-          c_nurses = timeslot
-          nrs_periods.append [nurse, c_nurses]
+        node.domain.constraints.each do |constraint|
+          next unless constraint.is_a?(DomainTimeslots)
+
+          constraint.timeslots.each do |timeslot|
+            c_nurses = timeslot
+            nrs_periods.append([nurse, c_nurses])
+          end
         end
       end
 
