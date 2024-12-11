@@ -36,7 +36,7 @@ Gem::Specification.new do |spec|
   # guide at: https://bundler.io/guides/creating_gem.html
   spec.add_dependency "activesupport"
   spec.add_dependency "nokogiri"
-  spec.add_dependency "ravensat"
+  spec.add_dependency "ravensat", github: "https://github.com/ueno12345/ravensat"
   spec.add_dependency "rufo"
   spec.add_dependency "sycamore"
 end
