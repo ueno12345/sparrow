@@ -129,10 +129,6 @@ class AtMost < Constraint
       end
     end
 
-    if @timeslots.nil? || @nurses.nil?
-      raise "制約条件がおかしいです．処理を停止します．"
-    end
-
     if @num == 1
       Ravensat::Claw.commander_at_most_one(ptable.select do |i|
         timeslots.uniq.include? i.timeslot.name
@@ -178,10 +174,6 @@ class AtLeast < Constraint
           nurses << res.name
         end
       end
-    end
-
-    if @timeslots.nil? || @nurses.nil?
-      raise "制約条件がおかしいです．処理を停止します．"
     end
 
     if @num == 1
@@ -233,10 +225,6 @@ class Exactly < Constraint
           nurses << res.name
         end
       end
-    end
-
-    if @timeslots.nil? || @nurses.nil?
-      raise "制約条件がおかしいです．処理を停止します．"
     end
 
     Ravensat::Claw.exactly_k(ptable.select do |i|
