@@ -11,16 +11,16 @@ class Nurse < Resource
   #    @domain.add(timeslots, __method__)
   #  end
 
-  def team(str)
-    @domain.add(str, __method__)
-  end
-
   def ladder(num)
     @domain.add(num, __method__)
   end
 
-  def group(*group)
-    @domain.add(group, __method__)
+  def groups(*groups)
+    @domain.add(groups, __method__)
+  end
+
+  def team(team)
+    @domain.add(team, __method__)
   end
 
   def domain_exec(ptable, node)
