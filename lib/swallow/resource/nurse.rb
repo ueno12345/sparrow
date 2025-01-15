@@ -30,9 +30,11 @@ class Nurse < Resource
     return @domain.exec(ptable, self) if node.domain.constraints.empty?
 
     nodes = ptable.select do |i|
-      (node.name == i.nurse.name) && (node.domain.constraints.first.timeslots.any? do |timeslot|
-                                        timeslot == i.timeslot.name
-                                      end)
+      (node.name == i.nurse.name) &&
+        node.domain.constraints.any? do |constraint|
+          constraint.is_a?(DomainTimeslots) &&
+            constraint.timeslots.any? { |timeslot| timeslot == i.timeslot.name }
+        end
     end.map(&:value).map { |value| [value] }
 
     nodes.each do |n|
