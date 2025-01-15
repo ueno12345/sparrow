@@ -13,9 +13,8 @@ group :development do
 end
 
 gem "activesupport"
-gem "nokogiri"
+gem "nokogiri", "~> 1.17.2"
 # gem "ravensat"
 gem "rufo"
 gem "sycamore"
-
 gem "ravensat", git: "https://github.com/ueno12345/ravensat.git", branch: "master"
