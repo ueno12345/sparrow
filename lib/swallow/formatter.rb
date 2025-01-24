@@ -25,39 +25,17 @@ module Swallow
     def format(ast, ptable)
       cnf = Ravensat::InitialNode.new
 
-      # Domain constraint
-      # ast.nodes.each do |node|
-      #   node.prun(ptable)
-      # end
-
-      # Domain execution
-      ast.nodes.each do |node|
-        tmp = node.domain_exec(ptable, node)
-        tmp.each do |t|
-          cnf &= t.first unless t.first.is_a? Ravensat::InitialNode
+      ptable.each do |i|
+        nurse = i.nurse
+        timeslot_name = i.timeslot.name
+        if nurse.domain.constraints.any? { |constraint| constraint.is_a?(DomainTimeslots) && constraint.timeslots.include?(timeslot_name) }
+          cnf &= Ravensat::Claw.exactly_one([i.value])
         end
       end
 
-      # Exactly One nurse
-      # pvars = ptable.group_by{|i| i.nurse.name}.values.reject{|i| i.first.nurse.domain.include? DomainFrequency}
-
-      # unless pvars.empty?
-      #   cnf &= pvars.map do |e|
-      #     Ravensat::Claw.alo e.map(&:value)
-      #   end.reduce(:&)
-      #   cnf &= pvars.map do |e|
-      #     Ravensat::Claw.commander_amo e.map(&:value)
-      #   end.reduce(:&)
-      # end
-
-      ##################
-      # この先する必要があるところ
-      ##################
-      # Conflict Constraints
       ast.nodes.each do |node|
         cnf &= node.exec(ptable) if node.is_a? Constraint
       end
-
       cnf
     end
   end
@@ -102,13 +80,9 @@ module Swallow
           end
         end
       end
-      # shift_json は 看護師名，日付，勤務形態を持つJSON
       shift_json = []
 
       nrs_periods.uniq.each do |data|
-        # data[0]は看護師名
-        # data[1]は 20240320day のような形
-        # date=20240320 shift_type=day のようにする
         split_date = data[1].match(/(\d+)(\D+)/)
         date = Date.parse(split_date[1])
         shift_type = case split_date[2]

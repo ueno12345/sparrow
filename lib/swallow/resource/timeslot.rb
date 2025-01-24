@@ -1,8 +1,6 @@
 class TimeslotInitializer < Resource
   attr_reader :timeslots
 
-  # WTABLE = ["Mon", "Tue", "Wed", "Thu", "Fri"].freeze
-
   def initialize(name = nil)
     super
     @timeslots = []
@@ -23,10 +21,6 @@ class TimeslotInitializer < Resource
     @domain.add(@periods, __method__)
     timeslot_initialize
   end
-
-#  def unavailable(*timeslots)
-#    @domain.add(timeslots, __method__)
-#  end
 
   private
 

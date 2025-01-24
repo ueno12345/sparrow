@@ -29,8 +29,6 @@ class Domain < DomainComponent
       constraint = DomainDays.new(domain)
     when :period
       constraint = DomainPeriod.new(domain)
-    #    when :unavailable
-    #      constraint = DomainUnavailable.new(domain)
     when :groups
       constraint = DomainGroups.new(domain)
     when :ladder
@@ -52,8 +50,6 @@ class Domain < DomainComponent
       @constraints.delete_if{|constraint| constraint.is_a? DomainDays}
     when :period
       @constraints.delete_if{|constraint| constraint.is_a? DomainPeriod}
-    #    when :unavailable
-    #      @constraints.delete_if{|constraint| constraint.is_a? DomainUnavailable}
     when :groups
       @constraints.delete_if{|constraint| constraint.is_a? DomainGroups}
     when :ladder
@@ -180,37 +176,7 @@ class DomainTimeslots < DomainComponent
       AUK
     end
   end
-
-  # def prun(ptable, parent)
-  #   ptable.reject!{|i| (parent.name == i.nurse.name) && !(@timeslots.any? { |timeslot| timeslot == i.timeslot.name })}
-  #   # ptable.reject!{|i| (parent.name == i.nurse.name) && !@timeslots.include?(i.timeslot.name)}
-  #   # ptable.select{|i| (parent.name == i.nurse.name) && (@timeslots.any? { |timeslot| timeslot == i.timeslot.name })}
-  # end
 end
-
-# class DomainUnavailable < DomainComponent
-#  attr_reader :unavailable_timeslots
-
-#  def initialize(unavailable_timeslots)
-#    @unavailable_timeslots = unavailable_timeslots
-#  end
-
-#  def to_auk
-#    <<~AUK
-#      unavailable #{@unavailable_timeslots.map { |i| %("#{i}") }.join(",")}
-#    AUK
-#  end
-
-#  def prun(ptable, parent)
-# require 'pry'
-# binding.pry
-
-#    case parent
-#    when TimeslotInitializer
-#      ptable.reject!{|i| @unavailable_timeslots.include?(i.timeslot.name)}
-#    end
-#  end
-# end
 
 class DomainRem < DomainComponent
   def initialize(comment)

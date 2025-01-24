@@ -7,7 +7,6 @@ class Resource
   def initialize(name = nil)
     @name = name
     @domain = Domain.new
-    # @belongs_to = ""
   end
 
   def block_name
@@ -27,7 +26,7 @@ class Resource
     @domain.prun(ptable, self)
   end
 
-  def domain_exec(ptable, node)
+  def domain_exec(ptable)
     @domain.exec(ptable, self)
   end
 

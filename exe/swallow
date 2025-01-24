@@ -45,12 +45,12 @@ module Swallow
     puts "UNSAT"
     exit
   end
-  # # AUK Generator
-  # あとから実装
+
+  # AUK Generator
   case option[:format]
   when "auk" then puts ast.to_auk
   when "html" then puts ast.to_html
   when "json" then puts ast.to_json
-    # when "csv" then puts ast.to_csv
+  # when "csv" then puts ast.to_csv
   end
 end
