@@ -1,14 +1,14 @@
 #! /usr/bin/env ruby
 
 $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
-require "swallow"
+require "sparrow"
 require "optparse"
 
-module Swallow
+module Sparrow
   option = { format: "auk", solver: "minisat", debug: false }
 
   OptionParser.new do |opt|
-    opt.banner = "Usage: swallow [options] <auk_file>"
+    opt.banner = "Usage: sparrow [options] <auk_file>"
     opt.on("-d", "--debug", "                       (default: false)") { |v| option[:debug] = v }
     opt.on("-f", "--format [VALUE]", %w[auk html json csv],
            "[auk | html | json | csv]     (default: auk)") do |v|

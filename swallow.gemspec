@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-require_relative "lib/swallow/version"
+require_relative "lib/sparrow/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "swallow"
-  spec.version       = Swallow::VERSION
+  spec.name          = "sparrow"
+  spec.version       = Sparrow::VERSION
   spec.authors       = ["ueno12345"]
   spec.email         = ["ueno2022@s.okayama-u.ac.jp"]
 
   spec.summary       = "Nurse scheduling Solver with AUK"
   spec.description   = "Nurse scheduling Solver with AUK"
-  spec.homepage      = "https://github.com/ueno12345/swallow"
+  spec.homepage      = "https://github.com/ueno12345/sparrow"
   spec.license       = "MIT"
   spec.required_ruby_version = ">= 3.0"
 
   # spec.metadata["allowed_push_host"] = "TODO: Set to 'https://mygemserver.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/ueno12345/swallow"
-  spec.metadata["changelog_uri"] = "https://github.com/ueno12345/swallow/blob/main/CHANGELOG.md"
+  spec.metadata["source_code_uri"] = "https://github.com/ueno12345/sparrow"
+  spec.metadata["changelog_uri"] = "https://github.com/ueno12345/sparrow/blob/main/CHANGELOG.md"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.

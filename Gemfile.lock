@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/ueno12345/ravensat.git
+  remote: https://github.com/nomlab/ravensat.git
   revision: 41379c537dc6fc23a44164df4d6b1c2e2e563874
   branch: master
   specs:
@@ -8,7 +8,7 @@ GIT
 PATH
   remote: .
   specs:
-    swallow (0.1.0)
+    sparrow (0.1.0)
       activesupport
       nokogiri (~> 1.17.2)
       rufo
@@ -96,7 +96,7 @@ DEPENDENCIES
   ravensat!
   rubocop (~> 1.7)
   rufo
-  swallow!
+  sparrow!
   sycamore
 
 BUNDLED WITH

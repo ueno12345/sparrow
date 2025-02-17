@@ -3,7 +3,7 @@ require_relative "ast"
 require_relative "resource"
 require_relative "constraint/constraint"
 
-module Swallow
+module Sparrow
   class AUKParser
     attr_reader :ast
 

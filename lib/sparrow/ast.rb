@@ -4,7 +4,7 @@ require_relative "formatter"
 # TODO: RubyTree検討
 # NOTE: そもそも，Treeである必要があるか
 
-module Swallow
+module Sparrow
   class AST < Tree
     def to_auk
       auk_formatter = AUKFormatter.new

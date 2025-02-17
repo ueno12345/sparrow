@@ -13,8 +13,8 @@
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceBeforeBlockBraces:
   Exclude:
-    - 'lib/swallow/constraint/domain.rb'
-    - 'lib/swallow/formatter.rb'
+    - 'lib/sparrow/constraint/domain.rb'
+    - 'lib/sparrow/formatter.rb'
 
 # Offense count: 48
 # This cop supports safe autocorrection (--autocorrect).
@@ -23,18 +23,18 @@ Layout/SpaceBeforeBlockBraces:
 # SupportedStylesForEmptyBraces: space, no_space
 Layout/SpaceInsideBlockBraces:
   Exclude:
-    - 'lib/swallow/constraint/domain.rb'
-    - 'lib/swallow/formatter.rb'
+    - 'lib/sparrow/constraint/domain.rb'
+    - 'lib/sparrow/formatter.rb'
 
 # Offense count: 10
 Lint/MissingSuper:
   Exclude:
-    - 'lib/swallow/constraint/domain.rb'
+    - 'lib/sparrow/constraint/domain.rb'
 
 # Offense count: 1
 Lint/UselessAssignment:
   Exclude:
-    - 'lib/swallow/constraint/domain.rb'
+    - 'lib/sparrow/constraint/domain.rb'
 
 # Offense count: 5
 # Configuration parameters: AllowedMethods, AllowedPatterns, IgnoredMethods, CountRepeatedAttributes.
@@ -66,17 +66,17 @@ Metrics/PerceivedComplexity:
 # Configuration parameters: AllowOnConstant.
 Style/CaseEquality:
   Exclude:
-    - 'lib/swallow/constraint/domain.rb'
+    - 'lib/sparrow/constraint/domain.rb'
 
 # Offense count: 1
 Style/CombinableLoops:
   Exclude:
-    - 'lib/swallow/formatter.rb'
+    - 'lib/sparrow/formatter.rb'
 
 # Offense count: 2
 Style/MultilineBlockChain:
   Exclude:
-    - 'lib/swallow/formatter.rb'
+    - 'lib/sparrow/formatter.rb'
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).

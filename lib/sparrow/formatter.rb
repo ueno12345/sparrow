@@ -2,7 +2,7 @@ require "ravensat"
 require "nokogiri"
 require "rufo"
 
-module Swallow
+module Sparrow
   class Formatter
     def format(ast)
       # 例外処理を書く

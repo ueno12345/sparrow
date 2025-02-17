@@ -1,7 +1,7 @@
 require "ravensat"
 require "forwardable"
 
-module Swallow
+module Sparrow
   class PropTable
     extend Forwardable
     include Enumerable

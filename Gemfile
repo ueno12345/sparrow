@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-# Specify your gem's dependencies in swallow.gemspec
+# Specify your gem's dependencies in sparrow.gemspec
 gemspec
 
 group :development do
@@ -14,7 +14,6 @@ end
 
 gem "activesupport"
 gem "nokogiri", "~> 1.17.2"
-# gem "ravensat"
 gem "rufo"
 gem "sycamore"
-gem "ravensat", git: "https://github.com/ueno12345/ravensat.git", branch: "master"
+gem "ravensat", git: "https://github.com/nomlab/ravensat.git", branch: "master"
